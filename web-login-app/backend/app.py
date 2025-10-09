@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -9,7 +10,7 @@ db = SQLAlchemy(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(150), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
 
 
 
@@ -23,8 +24,8 @@ def login_page():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username=username, password=password).first()
-        if user:
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
             session['username'] = username
             flash('Sikeres bejelentkezés!', 'success')
             return redirect(url_for('home'))
@@ -47,12 +48,66 @@ def register():
         if User.query.filter_by(username=username).first():
             flash('A felhasználónév már foglalt!', 'danger')
             return redirect(url_for('register'))
-        new_user = User(username=username, password=password)
+        hashed_password = generate_password_hash(password)
+        new_user = User(username=username, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         flash('Sikeres regisztráció! Most már bejelentkezhetsz.', 'success')
         return redirect(url_for('home'))
     return render_template('register.html')
+
+@app.route('/akcio')
+def akcio():
+    username = session.get('username')
+    return render_template('akcio.html', username=username)
+
+@app.route('/logikai')
+def logikai():
+    username = session.get('username')
+    return render_template('logikai.html', username=username)
+
+@app.route('/verseny')
+def verseny():
+    username = session.get('username')
+    return render_template('verseny.html', username=username)
+
+@app.route('/sport')
+def sport():
+    username = session.get('username')
+    return render_template('sport.html', username=username)
+
+@app.route('/retro')
+def retro():
+    username = session.get('username')
+    return render_template('retro.html', username=username)
+
+@app.route('/beallitasok')
+def beallitasok():
+    username = session.get('username')
+    return render_template('beallitasok.html', username=username)
+
+@app.route('/help')
+def help_page():
+    username = session.get('username')
+    return render_template('help.html', username=username)
+
+@app.route('/kapcsolat', methods=['GET', 'POST'])
+def kapcsolat():
+    username = session.get('username')
+    if request.method == 'POST':
+        # Kapcsolati űrlap feldolgozása
+        name = request.form.get('name')
+        email = request.form.get('email')
+        message = request.form.get('message')
+        # Itt normál esetben email-t küldenél vagy adatbázisba mentenéd
+        flash('Köszönjük az üzeneted! Hamarosan válaszolunk.', 'success')
+        return redirect(url_for('kapcsolat'))
+    return render_template('kapcsolat.html', username=username)
+
+@app.route('/gyik')
+def gyik():
+    username = session.get('username')
+    return render_template('gyik.html', username=username)
 
 if __name__ == '__main__':
     with app.app_context():

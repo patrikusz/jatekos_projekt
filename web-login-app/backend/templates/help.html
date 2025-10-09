@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Súgó - Online Játékok</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="title">
+            <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">Online Játékok</a>
+        </div>
+        <div class="header-controls">
+            {% if username %}
+                <span class="username-display">{{ username }}</span>
+            {% else %}
+                <a href="{{ url_for('login_page') }}" class="header-login-link">Bejelentkezés</a>
+            {% endif %}
+            <div class="dropdown">
+                <a href="javascript:void(0);" class="user-icon" id="userIcon" title="Profil">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+                      <circle cx="16" cy="12" r="8" fill="#007bff"/>
+                      <ellipse cx="16" cy="26" rx="10" ry="6" fill="#007bff"/>
+                    </svg>
+                </a>
+                <div class="dropdown-content" id="dropdownMenu">
+                    {% if username %}
+                        <a href="{{ url_for('beallitasok') }}">Beállítások</a>
+                        <a href="{{ url_for('help_page') }}">Help</a>
+                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
+                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
+                        <a href="{{ url_for('logout') }}">Kijelentkezés</a>
+                    {% else %}
+                        <a href="{{ url_for('login_page') }}">Bejelentkezés</a>
+                        <a href="{{ url_for('register') }}">Regisztráció</a>
+                        <a href="{{ url_for('help_page') }}">Help</a>
+                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
+                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="header-subtitle">Itt lesznek a legjobb online játékok!</div>
+    </div>
+
+    <div class="help-page">
+        <div class="help-header">
+            <h1>❓ Súgó & Útmutatók</h1>
+            <p>Minden, amit tudnod kell az Online Játékok platformról</p>
+        </div>
+
+        <div class="help-container">
+            <!-- Első lépések -->
+            <div class="help-section">
+                <div class="help-card">
+                    <div class="help-icon">🚀</div>
+                    <h2>Első lépések</h2>
+                    <div class="help-content">
+                        <h3>1. Regisztráció</h3>
+                        <p>Hozz létre egy ingyenes fiókot a "Regisztráció" gombra kattintva. Csak felhasználónév és jelszó szükséges!</p>
+                        
+                        <h3>2. Bejelentkezés</h3>
+                        <p>Add meg a regisztrációkor megadott adataidat és kezdheted is a játékot!</p>
+                        
+                        <h3>3. Böngészés</h3>
+                        <p>Válaszd ki a kedvenc kategóriádat a főoldalon: Akció, Logikai, Verseny, Sport vagy Retro.</p>
+                        
+                        <h3>4. Játék indítása</h3>
+                        <p>Kattints egy játék kártyára, nézd meg a részleteket és kattints a PLAY gombra!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Játék kategóriák -->
+            <div class="help-section">
+                <div class="help-card">
+                    <div class="help-icon">🎮</div>
+                    <h2>Játék Kategóriák</h2>
+                    <div class="help-content">
+                        <div class="category-help">
+                            <h4>🎮 Akció</h4>
+                            <p>Gyors reflexek, intenzív csaták és izgalmas kalandok. Tökéletes azoknak, akik szeretik az adrenalin löketet!</p>
+                        </div>
+                        <div class="category-help">
+                            <h4>🧩 Logikai</h4>
+                            <p>Gondolkodtató feladványok és agytornák. Fejleszd az elmédet és old meg bonyolult rejtvényeket!</p>
+                        </div>
+                        <div class="category-help">
+                            <h4>🏎️ Verseny</h4>
+                            <p>Gyorsaság és adrenalin! Versenyezz autókkal, motorokkal és más járművekkel.</p>
+                        </div>
+                        <div class="category-help">
+                            <h4>⚽ Sport</h4>
+                            <p>Virtuális sportélmények. Foci, kosár, tenisz és még sok más!</p>
+                        </div>
+                        <div class="category-help">
+                            <h4>👾 Retro</h4>
+                            <p>Klasszikus játékok modern köntösben. Nosztalgia és élvezet kombinálva!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kezelés -->
+            <div class="help-section">
+                <div class="help-card">
+                    <div class="help-icon">⌨️</div>
+                    <h2>Irányítás és Kezelés</h2>
+                    <div class="help-content">
+                        <h3>Általános irányítás:</h3>
+                        <ul class="help-list">
+                            <li><strong>Egér:</strong> Navigáció, kattintás, húzás</li>
+                            <li><strong>Nyilak:</strong> Mozgás a legtöbb játékban</li>
+                            <li><strong>WASD:</strong> Alternatív mozgás</li>
+                            <li><strong>Space:</strong> Ugrás / Akció</li>
+                            <li><strong>ESC:</strong> Szünet / Menü</li>
+                        </ul>
+                        <p><em>Minden játéknak saját irányítása van, amit a játék indításakor látsz.</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tippek -->
+            <div class="help-section">
+                <div class="help-card">
+                    <div class="help-icon">💡</div>
+                    <h2>Hasznos Tippek</h2>
+                    <div class="help-content">
+                        <ul class="help-list">
+                            <li>📱 <strong>Használd nagyobb képernyőn</strong> - A legtöbb játék PC-n vagy táblagépen optimális</li>
+                            <li>🌐 <strong>Stabil internetkapcsolat</strong> - Gondoskodj róla, hogy ne szakadjon meg a játékélmény</li>
+                            <li>🔊 <strong>Hangos élmény</strong> - Kapcsold be a hangot a teljes játékélményért</li>
+                            <li>⭐ <strong>Próbálj ki mindent</strong> - Minden kategóriában van valami különleges!</li>
+                            <li>💾 <strong>Automatikus mentés</strong> - A játék állásod automatikusan mentődik</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hibaelhárítás -->
+            <div class="help-section">
+                <div class="help-card">
+                    <div class="help-icon">🔧</div>
+                    <h2>Hibaelhárítás</h2>
+                    <div class="help-content">
+                        <h3>Gyakori problémák:</h3>
+                        
+                        <div class="troubleshoot-item">
+                            <h4>❌ A játék nem töltődik be</h4>
+                            <p><strong>Megoldás:</strong> Frissítsd az oldalt (F5) vagy töröld a böngésző cache-t.</p>
+                        </div>
+                        
+                        <div class="troubleshoot-item">
+                            <h4>🐌 Lassú működés</h4>
+                            <p><strong>Megoldás:</strong> Zárd be a többi fület, ellenőrizd az internet sebességedet.</p>
+                        </div>
+                        
+                        <div class="troubleshoot-item">
+                            <h4>🔇 Nincs hang</h4>
+                            <p><strong>Megoldás:</strong> Ellenőrizd a böngésző hangerőt és a rendszer hangerőt.</p>
+                        </div>
+                        
+                        <div class="troubleshoot-item">
+                            <h4>🚫 Bejelentkezési hiba</h4>
+                            <p><strong>Megoldás:</strong> Ellenőrizd a felhasználónevet és jelszót. Ha elfelejtetted, lépj kapcsolatba velünk!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- További segítség -->
+            <div class="help-section">
+                <div class="help-card highlight-card">
+                    <h2>Még mindig segítségre van szükséged?</h2>
+                    <p>Ne aggódj, itt vagyunk, hogy segítsünk!</p>
+                    <div class="help-buttons">
+                        <a href="{{ url_for('gyik') }}" class="help-btn">📚 Gyakori Kérdések</a>
+                        <a href="{{ url_for('kapcsolat') }}" class="help-btn">✉️ Kapcsolatfelvétel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const userIcon = document.getElementById('userIcon');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    userIcon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', function() {
+        dropdownMenu.style.display = 'none';
+    });
+});
+</script>
+</body>
+</html>

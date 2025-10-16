@@ -1477,7 +1477,7 @@ MonoBehaviour:
   player: {fileID: 0}
   lookSpeed: 2
   followSpeed: 5
-  distance: 3
+  distance: 10
   offset: {x: 0, y: 0, z: 0}
 --- !u!1001 &540145423
 PrefabInstance:

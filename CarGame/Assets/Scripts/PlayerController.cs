@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         float verticalInput = Input.GetAxis("Vertical");
-        rb.AddForce(transform.forward * speed * Time.deltaTime * verticalInput, ForceMode.Impulse);
+        rb.AddForce(transform.forward * speed * verticalInput, ForceMode.Force);
 
         //float horizontalInput = Input.GetAxis("Horizontal");
         //rb.AddTorque(transform.up * rotationSpeed * Time.deltaTime * horizontalInput, ForceMode.Impulse);

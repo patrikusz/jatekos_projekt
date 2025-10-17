@@ -313,26 +313,40 @@ public class GameManager : MonoBehaviour
     {
         if (isGameOver) return;
         isGameOver = true;
+        StartCoroutine(GameOverSequence(isWin));
+        
+    }
 
+    private IEnumerator GameOverSequence(bool isWin)
+    {
+        var audioForVehicles = currentPlayer.GetComponent<AudioForVehicles>();
+
+        if (audioForVehicles != null)
+        {
+            yield return StartCoroutine(audioForVehicles.PlayEngineStopSound());
+            timeText.gameObject.SetActive(false);
+            scoreText.gameObject.SetActive(false);
+
+            if (isWin)
+            {
+                gameOverText.SetText("Your time : {0} sec", timeCounter);
+            }
+            else
+            {
+                gameOverText.SetText("You lost!");
+            }
+
+            gameOverText.gameObject.SetActive(true);
+            buttonRestart.gameObject.SetActive(true);
+            cursorLocked = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
+
+
+        yield return new WaitForSeconds(1.0f);
         StopAllCoroutines();
         currentPlayer.GetComponent<PlayerController>().enabled = false;
-
-        timeText.gameObject.SetActive(false);
-        scoreText.gameObject.SetActive(false);
-
-        if (isWin)
-        {
-            gameOverText.SetText("Your time : {0} sec", timeCounter);
-        }
-        else
-        {
-            gameOverText.SetText("You lost!");
-        }
-
-        gameOverText.gameObject.SetActive(true);
-        buttonRestart.gameObject.SetActive(true);
-        cursorLocked = false;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
 }

@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     public float speed, rotationSpeed;
     Rigidbody rb;
-
+    AudioForVehicles audioForVehicles;
+    float verticalInput;
 
     private void Start()
     {
@@ -17,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        float verticalInput = Input.GetAxis("Vertical");
+        verticalInput = Input.GetAxis("Vertical");
         rb.AddForce(transform.forward * speed * verticalInput, ForceMode.Force);
 
         //float horizontalInput = Input.GetAxis("Horizontal");
@@ -26,8 +27,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        transform.Rotate(Vector3.up, horizontalInput * rotationSpeed * Time.deltaTime);
+        if (rb.velocity.magnitude > 0.5f)
+        {
+            float horizontalInput = Input.GetAxis("Horizontal");
+            transform.Rotate(Vector3.up, horizontalInput * rotationSpeed * Time.deltaTime);
+        }
+        
 
         //float verticalInput = Input.GetAxis("Vertical");
         //transform.Translate(Vector3.forward * speed * Time.deltaTime * verticalInput);

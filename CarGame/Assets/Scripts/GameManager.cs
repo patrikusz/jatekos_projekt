@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    Scoreboard scoreboardScript;
+    //Scoreboard scoreboardScript;
     [SerializeField] public AudioSource coinPickUpSource;
     [SerializeField] public AudioClip coinPickUpSound;
     [SerializeField] TextMeshProUGUI carOrBusText, scoreText, timeText, gameOverText;
@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
     public void DiffButtonHandler()
     {
         difficulty.gameObject.SetActive(false);
-        scoreboardScript.GetComponent<Scoreboard>().scoreboardButton.gameObject.SetActive(false);
+        //scoreboardScript.GetComponent<Scoreboard>().scoreboardButton.gameObject.SetActive(false);
         carOrBusText.gameObject.SetActive(true);
     }
 

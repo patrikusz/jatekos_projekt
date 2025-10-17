@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class HumanMove : MonoBehaviour
 {
+    [SerializeField] AudioSource humanHitSource;
+    [SerializeField] AudioClip humanHitSound;
     private bool isMovingRight = true;
     private float xLeft = -30.0f;
     private float xRight = 30.0f;
@@ -24,6 +26,7 @@ public class HumanMove : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            humanHitSource.PlayOneShot(humanHitSound);
             gameManager.GetComponent<GameManager>().GameOver(false);
         }
     }

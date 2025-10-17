@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public AudioSource coinPickUpSource;
+    public AudioClip coinPickUpSound;
     [SerializeField] TextMeshProUGUI carOrBusText, scoreText, timeText, gameOverText;
     [SerializeField] List<GameObject> vehicle, obstacles;
     [SerializeField] FollowPlayer cameraFollow;

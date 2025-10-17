@@ -8,19 +8,21 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public AudioSource coinPickUpSource;
-    public AudioClip coinPickUpSound;
+    Scoreboard scoreboardScript;
+    [SerializeField] public AudioSource coinPickUpSource;
+    [SerializeField] public AudioClip coinPickUpSound;
     [SerializeField] TextMeshProUGUI carOrBusText, scoreText, timeText, gameOverText;
     [SerializeField] List<GameObject> vehicle, obstacles;
     [SerializeField] FollowPlayer cameraFollow;
-    [SerializeField] GameObject coin, difficulty;
+    [SerializeField] public GameObject coin, difficulty;
     [SerializeField] Button buttonRestart;
     CapsuleCollider coinCollider;
     public GameObject currentPlayer;
-    private int maxCoin = 5, countCoin = 0, timeCounter = 0, index = -1, carOrBusNum, randomNum;
+    private int maxCoin = 5, countCoin = 0, index = -1, carOrBusNum, randomNum;
     public bool hasSpawned = false, isGameOver = false, isChoosing, cursorLocked = false;
     public float humanSpeed;
     private bool hasStarted = false;
+    public int timeCounter = 0;
 
 
     void Start()
@@ -81,6 +83,7 @@ public class GameManager : MonoBehaviour
     public void DiffButtonHandler()
     {
         difficulty.gameObject.SetActive(false);
+        scoreboardScript.GetComponent<Scoreboard>().scoreboardButton.gameObject.SetActive(false);
         carOrBusText.gameObject.SetActive(true);
     }
 

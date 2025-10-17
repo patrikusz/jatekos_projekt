@@ -52,6 +52,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RestartGame();
+        }
+        
         if (isGameOver) return;
 
         if (carOrBusText.gameObject.activeSelf == false)

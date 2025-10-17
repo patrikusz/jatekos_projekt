@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: -1402516130352357815}
   - component: {fileID: -6314112274788557189}
   - component: {fileID: 738720520718385962}
-  - component: {fileID: 842413157638297793}
+  - component: {fileID: 3885012172444477989}
   m_Layer: 0
   m_Name: Veh_Car_Blue_Z
   m_TagString: Player
@@ -594,7 +594,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   engineSounds: {fileID: 738720520718385962}
-  engineStopAudioSource: {fileID: 842413157638297793}
+  engineStopAudioSource: {fileID: 3885012172444477989}
   engineStopSound: {fileID: 8300000, guid: bde92cd6444974a0f85b3029923eac82, type: 3}
   engineSound: {fileID: 8300000, guid: 332ece0188033ac479bf3b79f4554fba, type: 3}
   engineStartSound: {fileID: 8300000, guid: 7947f6c5fe66d3344a893878112f9e2e, type: 3}
@@ -613,7 +613,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.279
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -697,7 +697,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!82 &842413157638297793
+--- !u!82 &3885012172444477989
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

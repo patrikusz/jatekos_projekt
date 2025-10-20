@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <script>
+  try {
+    if (localStorage.getItem('siteAnim') === 'off') document.documentElement.classList.add('no-anim');
+  } catch(e){}
+  
+</script>
+<script>
+  try {
+    const t = localStorage.getItem('siteTheme');
+    if (t === 'dark') document.documentElement.classList.add('theme-dark');
+    else if (t === 'light') document.documentElement.classList.add('theme-light');
+  } catch(e){}
+</script>
+    <meta charset="UTF-8">
+    <title>Beállítások - Online Játékok</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="title">
+            <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">Online Játékok</a>
+        </div>
+        <div class="header-controls">
+            {% if username %}
+                <span class="username-display">{{ username }}</span>
+            {% else %}
+                <a href="{{ url_for('login_page') }}" class="header-login-link">Bejelentkezés</a>
+            {% endif %}
+            <div class="dropdown">
+                <a href="javascript:void(0);" class="user-icon" id="userIcon" title="Profil">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+                      <circle cx="16" cy="12" r="8" fill="#007bff"/>
+                      <ellipse cx="16" cy="26" rx="10" ry="6" fill="#007bff"/>
+                    </svg>
+                </a>
+                <div class="dropdown-content" id="dropdownMenu">
+                    {% if username %}
+                        <a href="{{ url_for('beallitasok') }}">Beállítások</a>
+                        <a href="{{ url_for('help_page') }}">Help</a>
+                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
+                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
+                        <a href="{{ url_for('logout') }}">Kijelentkezés</a>
+                    {% else %}
+                        <a href="{{ url_for('login_page') }}">Bejelentkezés</a>
+                        <a href="{{ url_for('register') }}">Regisztráció</a>
+                        <a href="{{ url_for('help_page') }}">Help</a>
+                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
+                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="header-subtitle">Itt lesznek a legjobb online játékok!</div>
+    </div>
+
+    <div class="settings-page">
+        <div class="settings-header">
+            <h1>⚙️ Beállítások</h1>
+            <p>Személyre szabhatod a fiókod és az alkalmazás beállításait</p>
+        </div>
+
+        <div class="settings-container">
+            <!-- Profil Beállítások -->
+            <div class="settings-section">
+                <div class="settings-card">
+                    <h2>👤 Profil Beállítások</h2>
+                    
+                    {% if username %}
+                    <div class="profile-display">
+                        <div class="profile-avatar">{{ username[0]|upper }}</div>
+                        <div class="profile-info">
+                            <h3>{{ username }}</h3>
+                            <p>🎮 Aktív játékos</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="setting-item">
+                        <h3>📧 Email cím</h3>
+                        <p>Add meg az email címedet a visszajelzésekhez és értesítésekhez</p>
+                        <input type="email" class="setting-input" placeholder="pelda@email.com" disabled>
+                        <small>⏳ Hamarosan elérhető funkció</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jelszó Módosítás -->
+            <div class="settings-section">
+                <div class="settings-card">
+                    <h2>🔒 Biztonság</h2>
+                    
+                    <form class="password-change-form" method="post" action="{{ url_for('beallitasok') }}" id="changePwdForm" novalidate>
+                        <div class="setting-item">
+                            <h3>🔑 Jelszó módosítása</h3>
+                            <p>Válts új jelszót a nagyobb biztonság érdekében</p>
+                            <input type="password" name="current_password" id="current_password" class="setting-input" placeholder="Jelenlegi jelszó" required>
+                            <input type="password" name="new_password" id="new_password" class="setting-input" placeholder="Új jelszó (minimum 6 karakter)" required>
+                            <input type="password" name="confirm_password" id="confirm_password" class="setting-input" placeholder="Új jelszó megerősítése" required>
+                        </div>
+                        <button type="submit" class="settings-btn" id="changeBtn">💾 Jelszó módosítása</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Megjelenés -->
+            <div class="settings-section">
+                <div class="settings-card">
+                    <h2>🎨 Megjelenés</h2>
+                    
+                    <div class="setting-item">
+                        <h3>🌈 Színtéma</h3>
+                        <p>Válaszd ki a számodra legmegfelelőbb témát</p>
+                        <select id="themeSelect" class="setting-select">
+                          <option value="colorful">🎨 Színes (alap)</option>
+                          <option value="dark">🌙 Sötét</option>
+                          <option value="light">☀️ Világos</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="toggle-container">
+                            <div>
+                                <h3>✨ Animációk</h3>
+                                <p>Animált átmenetek és effektek engedélyezése</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="animations" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Értesítések -->
+            <div class="settings-section">
+                <div class="settings-card">
+                    <h2>🔔 Értesítések</h2>
+                    
+                    <div class="setting-item">
+                        <div class="toggle-container">
+                            <div>
+                                <h3>🎮 Új játékok</h3>
+                                <p>Értesítés új játékok hozzáadásakor</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="newGames" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="toggle-container">
+                            <div>
+                                <h3>📧 Email értesítések</h3>
+                                <p>Hírlevelek és frissítések emailben</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="emailNotif">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Veszélyzóna -->
+            <div class="settings-section">
+                <div class="settings-card danger-zone">
+                    <h2>⚠️ Veszélyzóna</h2>
+                    
+                    <div class="setting-item">
+                        <h3>🗑️ Fiók törlése</h3>
+                        <p class="warning-text">⚠️ Ez a művelet nem visszavonható! Minden adatod véglegesen törlődik.</p>
+                        <button type="button" class="settings-btn danger-btn" onclick="if(confirm('⚠️ Biztosan törölni szeretnéd a fiókodat?\n\nEz a művelet végérvényes és nem visszavonható!')) alert('⏳ Fiók törlés hamarosan elérhető!')">
+                            🗑️ Fiók törlése
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const userIcon = document.getElementById('userIcon');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    userIcon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', function() {
+        dropdownMenu.style.display = 'none';
+    });
+});
+</script>
+<script src="{{ url_for('static', filename='js/theme_switch.js') }}"></script>
+<script src="{{ url_for('static', filename='js/change_password.js') }}"></script>
+<script src="{{ url_for('static', filename='js/animation_toggle.js') }}"></script>
+</body>
+</html>

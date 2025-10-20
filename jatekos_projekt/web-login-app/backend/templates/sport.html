@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <script>
+  try {
+    if (localStorage.getItem('siteAnim') === 'off') document.documentElement.classList.add('no-anim');
+  } catch(e){}
+</script>
+<script>
+  try {
+    const t = localStorage.getItem('siteTheme');
+    if (t === 'dark') document.documentElement.classList.add('theme-dark');
+    else if (t === 'light') document.documentElement.classList.add('theme-light');
+  } catch(e){}
+</script>
+    <meta charset="UTF-8">
+    <title>Sport Játékok - Online Játékok</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="title">
+            <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">Online Játékok</a>
+        </div>
+        <div class="header-controls">
+            {% if username %}
+                <span class="username-display">{{ username }}</span>
+            {% else %}
+                <a href="{{ url_for('login_page') }}" class="header-login-link">Bejelentkezés</a>
+            {% endif %}
+            <div class="dropdown">
+                <a href="javascript:void(0);" class="user-icon" id="userIcon" title="Profil">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+                      <circle cx="16" cy="12" r="8" fill="#007bff"/>
+                      <ellipse cx="16" cy="26" rx="10" ry="6" fill="#007bff"/>
+                    </svg>
+                </a>
+                <div class="dropdown-content" id="dropdownMenu">
+                    {% if username %}
+                        <a href="{{ url_for('beallitasok') }}">Beállítások</a>
+                        <a href="{{ url_for('help_page') }}">Help</a>
+                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
+                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
+                        <a href="{{ url_for('logout') }}">Kijelentkezés</a>
+                    {% else %}
+                        <a href="{{ url_for('login_page') }}">Bejelentkezés</a>
+                        <a href="{{ url_for('register') }}">Regisztráció</a>
+                        <a href="{{ url_for('help_page') }}">Help</a>
+                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
+                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="header-subtitle">Itt lesznek a legjobb online játékok!</div>
+    </div>
+
+    <div class="category-page-header">
+        <h1>⚽ Sport Játékok</h1>
+        <p>Sportolj virtuálisan és légy a bajnok!</p>
+    </div>
+
+    <div class="games-container">
+        <div class="game-card">
+            <div class="game-image" style="background: linear-gradient(135deg, #56ab2f, #a8e063);"></div>
+            <div class="game-info">
+                <h3 class="game-title">Soccer Champions League</h3>
+                <button class="game-description-toggle">Részletek ▼</button>
+                <p class="game-description">Vezess egy focicsapatot a bajnoki címig! Stratégia, képességek és csapatmunka a siker kulcsa!</p>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-image" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f);"></div>
+            <div class="game-info">
+                <h3 class="game-title">Basketball Pro</h3>
+                <button class="game-description-toggle">Részletek ▼</button>
+                <p class="game-description">Dobálj kosarakat 3-pontos vonalról! Időre versenyezz és dobj új rekordokat az NBA arénákban!</p>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
+            <div class="game-info">
+                <h3 class="game-title">Tennis World Tour</h3>
+                <button class="game-description-toggle">Részletek ▼</button>
+                <p class="game-description">Grand Slam bajnokságok a világ legjobb teniszezői ellen! Perfekt szerva és erős ütések!</p>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-image" style="background: linear-gradient(135deg, #fa709a, #fee140);"></div>
+            <div class="game-info">
+                <h3 class="game-title">Golf Master</h3>
+                <button class="game-description-toggle">Részletek ▼</button>
+                <p class="game-description">Professzionális golf szimulátor gyönyörű pályákkal! Pontosság és stratégia minden lyuknál!</p>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-image" style="background: linear-gradient(135deg, #a8edea, #fed6e3);"></div>
+            <div class="game-info">
+                <h3 class="game-title">Volleyball Beach</h3>
+                <button class="game-description-toggle">Részletek ▼</button>
+                <p class="game-description">Strandröplabda napos tengerpartokon! 2 vs 2 meccsek, szervák és smasholások!</p>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-image" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+            <div class="game-info">
+                <h3 class="game-title">Ice Hockey Clash</h3>
+                <button class="game-description-toggle">Részletek ▼</button>
+                <p class="game-description">Jégkorong csapatok irányítása! Gyors akcióval, ütközésekkel és gólokkal teli meccsek!</p>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-image" style="background: linear-gradient(135deg, #ffecd2, #fcb69f);"></div>
+            <div class="game-info">
+                <h3 class="game-title">Baseball Homerun</h3>
+                <button class="game-description-toggle">Részletek ▼</button>
+                <p class="game-description">Ütőként légy a legjobb! Homerunok, pontszerzések és bajnokságok várnak rád!</p>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-image" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);"></div>
+            <div class="game-info">
+                <h3 class="game-title">Olympic Games 2024</h3>
+                <button class="game-description-toggle">Részletek ▼</button>
+                <p class="game-description">Versenyezz 20+ különböző olimpiai sportágban! Futás, úszás, atlétika és még sok más!</p>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-image" style="background: linear-gradient(135deg, #fad0c4, #ffd1ff);"></div>
+            <div class="game-info">
+                <h3 class="game-title">Boxing Champion</h3>
+                <button class="game-description-toggle">Részletek ▼</button>
+                <p class="game-description">Légy az ökölvívás bajnoka! Ütések, védés és knock-outok a ringben!</p>
+            </div>
+        </div>
+
+        <div class="game-card">
+            <div class="game-image" style="background: linear-gradient(135deg, #84fab0, #8fd3f4);"></div>
+            <div class="game-info">
+                <h3 class="game-title">Skateboard Street</h3>
+                <button class="game-description-toggle">Részletek ▼</button>
+                <p class="game-description">Extrém gördeszkázás városi környezetben! Trükkök, grindolások és kombo pontszámok!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/game-cards.js') }}"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const userIcon = document.getElementById('userIcon');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    userIcon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', function() {
+        dropdownMenu.style.display = 'none';
+    });
+});
+</script>
+</body>
+</html>

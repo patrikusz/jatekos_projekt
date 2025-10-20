@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <script>
+  try {
+    if (localStorage.getItem('siteAnim') === 'off') document.documentElement.classList.add('no-anim');
+  } catch(e){}
+</script>
+<script>
+  try {
+    const t = localStorage.getItem('siteTheme');
+    if (t === 'dark') document.documentElement.classList.add('theme-dark');
+    else if (t === 'light') document.documentElement.classList.add('theme-light');
+  } catch(e){}
+</script>
+    <meta charset="UTF-8">
+    <title>Bejelentkezés</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <h2>Bejelentkezés</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flashes">
+              {% for category, message in messages %}
+                {% if category == 'danger' %}
+                  <li class="{{ category }}">{{ message }}</li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        <form action="{{ url_for('login_page') }}" method="post">
+            <input type="text" name="username" placeholder="Felhasználónév" required>
+            <input type="password" name="password" placeholder="Jelszó" required>
+            <button type="submit">Belépés</button>
+        </form>
+        <p>Nincs még fiókod? <a href="{{ url_for('register') }}">Regisztráció</a></p>
+    </div>
+</body>
+</html>

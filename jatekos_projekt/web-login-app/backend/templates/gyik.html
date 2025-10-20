@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <script>
+  try {
+    if (localStorage.getItem('siteAnim') === 'off') document.documentElement.classList.add('no-anim');
+  } catch(e){}
+</script>
+<script>
+  try {
+    const t = localStorage.getItem('siteTheme');
+    if (t === 'dark') document.documentElement.classList.add('theme-dark');
+    else if (t === 'light') document.documentElement.classList.add('theme-light');
+  } catch(e){}
+</script>
+    <meta charset="UTF-8">
+    <title>GYIK - Online Játékok</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="title">
+            <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">Online Játékok</a>
+        </div>
+        <div class="header-controls">
+            {% if username %}
+                <span class="username-display">{{ username }}</span>
+            {% else %}
+                <a href="{{ url_for('login_page') }}" class="header-login-link">Bejelentkezés</a>
+            {% endif %}
+            <div class="dropdown">
+                <a href="javascript:void(0);" class="user-icon" id="userIcon" title="Profil">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+                      <circle cx="16" cy="12" r="8" fill="#007bff"/>
+                      <ellipse cx="16" cy="26" rx="10" ry="6" fill="#007bff"/>
+                    </svg>
+                </a>
+                <div class="dropdown-content" id="dropdownMenu">
+                    {% if username %}
+                        <a href="{{ url_for('beallitasok') }}">Beállítások</a>
+                        <a href="{{ url_for('help_page') }}">Help</a>
+                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
+                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
+                        <a href="{{ url_for('logout') }}">Kijelentkezés</a>
+                    {% else %}
+                        <a href="{{ url_for('login_page') }}">Bejelentkezés</a>
+                        <a href="{{ url_for('register') }}">Regisztráció</a>
+                        <a href="{{ url_for('help_page') }}">Help</a>
+                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
+                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="header-subtitle">Itt lesznek a legjobb online játékok!</div>
+    </div>
+
+    <div class="faq-page">
+        <div class="faq-header">
+            <h1>❓ Gyakori Kérdések</h1>
+            <p>A leggyakrabban feltett kérdések és válaszok</p>
+        </div>
+
+        <div class="faq-container">
+            <!-- Általános kérdések -->
+            <div class="faq-category">
+                <h2 class="category-title">🌐 Általános kérdések</h2>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Mi az Online Játékok platform?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Az Online Játékok egy ingyenes platform, ahol számos kategóriában böngészhetsz és játszhatsz online játékokkal. Küldetésünk, hogy a legjobb játékélményt nyújtsuk neked anélkül, hogy le kellene töltened bármit!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Ingyenes a platform használata?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Igen! Az Online Játékok platform teljesen ingyenes. Nincs rejtett díj, nem kell fizetned semmilyen előfizetést. Csak regisztrálj és játszhatsz korlátlanul!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Szükséges a regisztráció?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Igen, a játékok eléréséhez szükséges egy ingyenes fiók létrehozása. Ez lehetővé teszi számunkra, hogy mentsd a játék állásod és személyre szabott élményt nyújtsunk. A regisztráció mindössze 30 másodpercet vesz igénybe!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fiók kezelés -->
+            <div class="faq-category">
+                <h2 class="category-title">👤 Fiók kezelés</h2>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Hogyan tudok jelszót változtatni?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Menj a Beállítások oldalra (profil ikon → Beállítások), majd a Biztonság szekcióban találod a jelszóváltás lehetőséget. Add meg a régi jelszavad, majd az újat kétszer a megerősítéshez.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Elfelejtettem a jelszavamat, mit tegyek?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Jelenleg a jelszó-visszaállítási funkció fejlesztés alatt áll. Kérlek, vedd fel velünk a kapcsolatot az info@onlinejatekok.hu címen, és segítünk helyreállítani a fiókodat!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Törölhetem a fiókom?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Igen, a Beállítások oldal alján, a "Veszélyzóna" szekcióban található a fiók törlés opció. Kérlek, vedd figyelembe, hogy ez a művelet végérvényes és az összes adatod törlődik!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Módosíthatom a felhasználónevemet?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Jelenleg a felhasználónév módosítása nem lehetséges a regisztráció után. Ha mindenképpen szeretnéd megváltoztatni, vedd fel velünk a kapcsolatot!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Játékokkal kapcsolatos -->
+            <div class="faq-category">
+                <h2 class="category-title">🎮 Játékok</h2>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Hány játék érhető el?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Jelenleg több mint 50 játékunk van 5 különböző kategóriában (Akció, Logikai, Verseny, Sport, Retro). Folyamatosan bővítjük a kínálatot új és izgalmas játékokkal!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Milyen gyakran kerülnek fel új játékok?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Minden héten hozzáadunk legalább 2-3 új játékot. Kövesd az értesítéseket és a főoldalt, hogy mindig tudj az újdonságokról!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>A játékok mobilon is működnek?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>A legtöbb játékunk asztali gépen optimalizált, de dolgozunk a mobilos támogatáson. Egyes egyszerűbb játékok már most is működnek táblagépen és mobilon!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Mentődik a játék állásom?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Igen! A legtöbb játék automatikusan menti a haladásodat. Amikor legközelebb bejelentkezel, folytathatod ott, ahol abbahagytad.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Van többjátékos mód?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Jelenleg egyedüli játékosokra összpontosítunk, de a többjátékos funkciók a fejlesztési tervünk részét képezik. Hamarosan versenyezhetsz a barátaiddal is!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technikai kérdések -->
+            <div class="faq-category">
+                <h2 class="category-title">🔧 Technikai kérdések</h2>
+                
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Milyen böngészőt ajánlotok?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>A legjobb élmény érdekében a Google Chrome, Mozilla Firefox vagy Microsoft Edge legújabb verzióját ajánljuk. Safari-val is működnek a játékok, de néhány funkció korlátozott lehet.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>A játék lassú vagy akadozik, mit tegyek?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Próbáld ki ezeket:
+                        <ul>
+                            <li>Frissítsd az oldalt (F5)</li>
+                            <li>Zárd be a többi böngésző fület</li>
+                            <li>Töröld a böngésző cache-t</li>
+                            <li>Ellenőrizd az internet sebességedet</li>
+                            <li>Próbáld meg egy másik böngészővel</li>
+                        </ul>
+                        Ha továbbra is problémád van, írj nekünk!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>A játék nem töltődik be, fehér képernyőt látok</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ez általában böngésző-kompatibilitási probléma. Próbáld meg:
+                        <ol>
+                            <li>Frissítsd a böngésződet a legújabb verzióra</li>
+                            <li>Töröld a cookie-kat és cache-t</li>
+                            <li>Kapcsold ki az adblockereket</li>
+                            <li>Próbálj inkognitó módban betölteni</li>
+                        </ol>
+                        Ha ez sem segít, jelezd a problémát az ügyfélszolgálatnak!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Biztonságos a platformotok?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Abszolút! Komolyan vesszük a biztonságot. A jelszavakat hash-elve tároljuk (bcrypt), SSL titkosítást használunk, és soha nem osztjuk meg az adataidat harmadik féllel.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Még mindig segítség kell -->
+            <div class="faq-footer">
+                <div class="faq-footer-card">
+                    <h2>Nem találtad meg a választ?</h2>
+                    <p>Ne aggódj, szívesen segítünk! Vedd fel velünk a kapcsolatot.</p>
+                    <div class="faq-footer-buttons">
+                        <a href="{{ url_for('kapcsolat') }}" class="footer-btn primary">✉️ Kapcsolat</a>
+                        <a href="{{ url_for('help_page') }}" class="footer-btn secondary">📖 Súgó</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Dropdown menu
+    const userIcon = document.getElementById('userIcon');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    userIcon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', function() {
+        dropdownMenu.style.display = 'none';
+    });
+
+    // FAQ Accordion
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', function() {
+            const faqItem = this.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Összes többi elem bezárása (opcionális - ha csak egy legyen nyitva egyszerre)
+            // document.querySelectorAll('.faq-item').forEach(item => {
+            //     item.classList.remove('active');
+            // });
+            
+            // Jelenlegi elem toggle
+            if (isActive) {
+                faqItem.classList.remove('active');
+            } else {
+                faqItem.classList.add('active');
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

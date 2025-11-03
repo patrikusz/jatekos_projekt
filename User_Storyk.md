@@ -12,6 +12,33 @@ Mint látogató, szeretném, hogy a weboldalon egy jól strukturált menü legye
 **Prioritás**: Magas  
 **Szerző**: Anna
 
+Gherkin nyelven:
+Feature: Menü (Navigációs sáv)
+  Mint látogató
+  Azért, hogy gyorsan elérjem az oldal fő részeit
+  Szeretném, ha a weboldalon egy jól strukturált menü jelenne meg
+
+  Background:
+    Given a weboldal betöltődött
+
+  Scenario: A menü megjelenik az oldal tetején
+    Then a menü fixen jelenik meg az oldal tetején
+
+  Scenario: A menü reszponzív mobilnézetben
+    When a felhasználó mobil eszközről nyitja meg az oldalt
+    Then a menü megfelelően jelenik meg reszponzív elrendezésben
+
+  Scenario: A menüelemek megjelenítése
+    Then a menü tartalmazza a következő elemeket:
+      | Menüelem      |
+      | Kezdőlap      |
+      | Kapcsolat     |
+      | Bejelentkezés |
+
+  @prioritas:Magas
+  @szerzo:Anna
+
+
 ---
 
 ## 2. Kapcsolat oldal

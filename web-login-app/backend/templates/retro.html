@@ -1,158 +1,29 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <title>Retro Játékok - Online Játékok</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% from 'partials/head.html' import head %}
+    {{ head('Retro Játékok - Online Játékok') }}
 </head>
-<body>
-    <div class="header">
-        <div class="title">
-            <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">Online Játékok</a>
+<body data-theme="{{ user.theme if user else 'colored' }}" {% if user and not user.animations_enabled %}class="no-animations"{% endif %}>
+    {% from 'partials/navbar.html' import navbar %}
+    {{ navbar(username) }}
+    <div class="container my-5">
+        <div class="text-center text-white mb-5">
+            <h1 class="display-4 fw-bold">👾 Retro Játékok</h1>
+            <p class="lead">Klasszikus játékok modern köntösben!</p>
         </div>
-        <div class="header-controls">
-            {% if username %}
-                <span class="username-display">{{ username }}</span>
-            {% else %}
-                <a href="{{ url_for('login_page') }}" class="header-login-link">Bejelentkezés</a>
-            {% endif %}
-            <div class="dropdown">
-                <a href="javascript:void(0);" class="user-icon" id="userIcon" title="Profil">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-                      <circle cx="16" cy="12" r="8" fill="#007bff"/>
-                      <ellipse cx="16" cy="26" rx="10" ry="6" fill="#007bff"/>
-                    </svg>
-                </a>
-                <div class="dropdown-content" id="dropdownMenu">
-                    {% if username %}
-                        <a href="{{ url_for('beallitasok') }}">Beállítások</a>
-                        <a href="{{ url_for('help_page') }}">Help</a>
-                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
-                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
-                        <a href="{{ url_for('logout') }}">Kijelentkezés</a>
-                    {% else %}
-                        <a href="{{ url_for('login_page') }}">Bejelentkezés</a>
-                        <a href="{{ url_for('register') }}">Regisztráció</a>
-                        <a href="{{ url_for('help_page') }}">Help</a>
-                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
-                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
-                    {% endif %}
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card glass-card hover-lift h-100">
+                    <div class="card-header" style="background: linear-gradient(135deg, #a1c4fd, #c2e9fb); height: 200px;"></div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Pac-Man Reborn</h5>
+                        <p class="card-text text-muted">A klasszikus Pac-Man újragondolva!</p>
+                        <button class="btn btn-sm btn-gradient-primary w-100"><i class="bi bi-play-fill"></i> Játék</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="header-subtitle">Itt lesznek a legjobb online játékok!</div>
     </div>
-
-    <div class="category-page-header">
-        <h1>👾 Retro Játékok</h1>
-        <p>Nosztalgia és klasszikus játékok újragondolva!</p>
-    </div>
-
-    <div class="games-container">
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Pac-Man Revolution</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">A legendás Pac-Man modern változata! Új pályák, power-upok és többjátékos mód is elérhető!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Tetris Remastered</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Klasszikus Tetris HD grafikával és új játékmódokkal! Végtelen szórakozás blokkokkal!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #fa709a, #fee140);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Space Invaders HD</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Az 1978-as klasszikus új köntösben! Védd meg a Földet az űrlények ellen modernizált grafikával!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #a8edea, #fed6e3);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Asteroids Reborn</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Űrhajód az aszteroidák között! Retro játékmenet modern vizuális effektekkel!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Pong Championship</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Az első videojáték visszatért! Pong torna különböző nehézségi szintekkel és multiplayer móddal!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #ffecd2, #fcb69f);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Donkey Kong Classic</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Mario eredeti kalandja! Mentsd meg a hercegnőt Donkey Kong karmai közül platform pályákon!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Breakout Deluxe</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Törj le téglákat labdával és ütővel! Százak pálya, különleges power-upok és boss fight-ok!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #fad0c4, #ffd1ff);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Snake Evolution</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">A Nokia kígyó játék fejlettebb változata! Gyűjts pontokat, növekedj és kerüld a falakat!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #a1c4fd, #c2e9fb);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Galaga Supreme</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Űrlövölde klasszikus újragondolva! Lőj le minél több ellenséges űrhajót és szerezz rekord pontot!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #84fab0, #8fd3f4);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Frogger Adventure</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Segíts a békának átkelni az úton és folyón! Retro kaland új szintekkel és kihívásokkal!</p>
-            </div>
-        </div>
-    </div>
-
-    <script src="{{ url_for('static', filename='js/game-cards.js') }}"></script>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const userIcon = document.getElementById('userIcon');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    userIcon.addEventListener('click', function(e) {
-        e.stopPropagation();
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
-    document.addEventListener('click', function() {
-        dropdownMenu.style.display = 'none';
-    });
-});
-</script>
 </body>
 </html>

@@ -1,92 +1,82 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <title>Online Játékok</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% from 'partials/head.html' import head %}
+    {{ head('Online Játékok') }}
 </head>
-<body>
-    <div class="header">
-        <div class="title">Online Játékok</div>
-        <div class="header-controls">
-            {% if username %}
-                <span class="username-display">{{ username }}</span>
-            {% else %}
-                <a href="{{ url_for('login_page') }}" class="header-login-link">Bejelentkezés</a>
-            {% endif %}
-            <div class="dropdown">
-                <a href="javascript:void(0);" class="user-icon" id="userIcon" title="Profil">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-                      <circle cx="16" cy="12" r="8" fill="#007bff"/>
-                      <ellipse cx="16" cy="26" rx="10" ry="6" fill="#007bff"/>
-                    </svg>
+<body data-theme="{{ user.theme if user else 'colored' }}" {% if user and not user.animations_enabled %}class="no-animations"{% endif %}>
+    {% from 'partials/navbar.html' import navbar %}
+    {{ navbar(username) }}
+
+    <div class="container my-5">
+        <!-- Hero Section -->
+        <div class="text-center text-white mb-5">
+            <h1 class="display-3 fw-bold gradient-text mb-3">🎮 Online Játékok</h1>
+            <p class="lead">Itt lesznek a legjobb online játékok!</p>
+        </div>
+
+        <!-- Categories -->
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('akcio') }}" class="text-decoration-none">
+                    <div class="card glass-card hover-lift h-100 text-center p-4">
+                        <div class="card-body">
+                            <div class="category-icon display-1 mb-3">🎮</div>
+                            <h3 class="card-title fw-bold">Akció</h3>
+                            <p class="card-text text-muted">Gyors reflexek és izgalmas kalandok</p>
+                        </div>
+                    </div>
                 </a>
-                <div class="dropdown-content" id="dropdownMenu">
-                    {% if username %}
-                        <a href="{{ url_for('beallitasok') }}">Beállítások</a>
-                        <a href="{{ url_for('help_page') }}">Help</a>
-                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
-                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
-                        <a href="{{ url_for('logout') }}">Kijelentkezés</a>
-                    {% else %}
-                        <a href="{{ url_for('login_page') }}">Bejelentkezés</a>
-                        <a href="{{ url_for('register') }}">Regisztráció</a>
-                        <a href="{{ url_for('help_page') }}">Help</a>
-                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
-                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
-                    {% endif %}
-                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('logikai') }}" class="text-decoration-none">
+                    <div class="card glass-card hover-lift h-100 text-center p-4">
+                        <div class="card-body">
+                            <div class="category-icon display-1 mb-3">🧩</div>
+                            <h3 class="card-title fw-bold">Logikai</h3>
+                            <p class="card-text text-muted">Gondolkodtató feladványok</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('verseny') }}" class="text-decoration-none">
+                    <div class="card glass-card hover-lift h-100 text-center p-4">
+                        <div class="card-body">
+                            <div class="category-icon display-1 mb-3">🏎️</div>
+                            <h3 class="card-title fw-bold">Verseny</h3>
+                            <p class="card-text text-muted">Gyorsaság és adrenalin</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('sport') }}" class="text-decoration-none">
+                    <div class="card glass-card hover-lift h-100 text-center p-4">
+                        <div class="card-body">
+                            <div class="category-icon display-1 mb-3">⚽</div>
+                            <h3 class="card-title fw-bold">Sport</h3>
+                            <p class="card-text text-muted">Virtuális sportélmények</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ url_for('retro') }}" class="text-decoration-none">
+                    <div class="card glass-card hover-lift h-100 text-center p-4">
+                        <div class="card-body">
+                            <div class="category-icon display-1 mb-3">👾</div>
+                            <h3 class="card-title fw-bold">Retro</h3>
+                            <p class="card-text text-muted">Klasszikus játékok</p>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
-        <div class="header-subtitle">Itt lesznek a legjobb online játékok!</div>
     </div>
-    <div class="center-content">
-        Válassz kategóriát:
-    </div>
-    <div class="categories">
-        <a href="{{ url_for('akcio') }}" class="category-card-link">
-            <div class="category-card">
-                <div class="category-icon">🎮</div>
-                Akció
-            </div>
-        </a>
-        <a href="{{ url_for('logikai') }}" class="category-card-link">
-            <div class="category-card">
-                <div class="category-icon">🧩</div>
-                Logikai
-            </div>
-        </a>
-        <a href="{{ url_for('verseny') }}" class="category-card-link">
-            <div class="category-card">
-                <div class="category-icon">🏎️</div>
-                Verseny
-            </div>
-        </a>
-        <a href="{{ url_for('sport') }}" class="category-card-link">
-            <div class="category-card">
-                <div class="category-icon">⚽</div>
-                Sport
-            </div>
-        </a>
-        <a href="{{ url_for('retro') }}" class="category-card-link">
-            <div class="category-card">
-                <div class="category-icon">👾</div>
-                Retro
-            </div>
-        </a>
-    </div>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const userIcon = document.getElementById('userIcon');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    userIcon.addEventListener('click', function(e) {
-        e.stopPropagation();
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
-    document.addEventListener('click', function() {
-        dropdownMenu.style.display = 'none';
-    });
-});
-</script>
 </body>
 </html>

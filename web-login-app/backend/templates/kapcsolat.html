@@ -1,166 +1,104 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <title>Kapcsolat - Online Játékok</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% from 'partials/head.html' import head %}
+    {{ head('Kapcsolat - Online Játékok') }}
 </head>
-<body>
-    <div class="header">
-        <div class="title">
-            <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">Online Játékok</a>
-        </div>
-        <div class="header-controls">
-            {% if username %}
-                <span class="username-display">{{ username }}</span>
-            {% else %}
-                <a href="{{ url_for('login_page') }}" class="header-login-link">Bejelentkezés</a>
-            {% endif %}
-            <div class="dropdown">
-                <a href="javascript:void(0);" class="user-icon" id="userIcon" title="Profil">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-                      <circle cx="16" cy="12" r="8" fill="#007bff"/>
-                      <ellipse cx="16" cy="26" rx="10" ry="6" fill="#007bff"/>
-                    </svg>
-                </a>
-                <div class="dropdown-content" id="dropdownMenu">
-                    {% if username %}
-                        <a href="{{ url_for('beallitasok') }}">Beállítások</a>
-                        <a href="{{ url_for('help_page') }}">Help</a>
-                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
-                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
-                        <a href="{{ url_for('logout') }}">Kijelentkezés</a>
-                    {% else %}
-                        <a href="{{ url_for('login_page') }}">Bejelentkezés</a>
-                        <a href="{{ url_for('register') }}">Regisztráció</a>
-                        <a href="{{ url_for('help_page') }}">Help</a>
-                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
-                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        <div class="header-subtitle">Itt lesznek a legjobb online játékok!</div>
-    </div>
-
-    <div class="contact-page">
-        <div class="contact-header">
-            <h1>✉️ Kapcsolatfelvétel</h1>
-            <p>Van kérdésed, észrevételed vagy visszajelzésed? Írj nekünk!</p>
+<body data-theme="{{ user.theme if user else 'colored' }}" {% if user and not user.animations_enabled %}class="no-animations"{% endif %}>
+    {% from 'partials/navbar.html' import navbar %}
+    {{ navbar(username) }}
+    <div class="container my-5">
+        <div class="text-center text-white mb-5">
+            <h1 class="display-4 fw-bold"><i class="bi bi-envelope"></i> Kapcsolatfelvétel</h1>
+            <p class="lead">Van kérdésed, észrevételed vagy visszajelzésed? Írj nekünk!</p>
         </div>
 
-        <div class="contact-container">
-            <!-- Kapcsolatfelvételi űrlap -->
-            <div class="contact-form-section">
-                <div class="contact-card">
-                    <h2>Küldj nekünk üzenetet</h2>
-                    
-                    {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                            <div class="flash-messages">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card glass-card">
+                    <div class="card-body p-4">
+                        <h3 class="card-title mb-4">Küldj nekünk üzenetet</h3>
+                        
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
                                 {% for message in messages %}
-                                    <div class="flash-message success">✅ {{ message }}</div>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        ✅ {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
                                 {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <form method="POST" action="{{ url_for('kapcsolat') }}">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Név *</label>
+                                <input type="text" class="form-control" id="name" name="name" required 
+                                       placeholder="Add meg a neved" value="{{ user.name if user else '' }}"
+                                       {% if user %}readonly{% endif %}>
                             </div>
-                        {% endif %}
-                    {% endwith %}
-                    
-                    <form method="POST" action="{{ url_for('kapcsolat') }}" class="contact-form">
-                        <div class="form-group">
-                            <label for="name">Név *</label>
-                            <input type="text" id="name" name="name" required placeholder="Add meg a neved">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">E-mail cím *</label>
-                            <input type="email" id="email" name="email" required placeholder="pelda@email.com">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="subject">Tárgy</label>
-                            <select id="subject" name="subject">
-                                <option value="general">Általános kérdés</option>
-                                <option value="technical">Technikai probléma</option>
-                                <option value="game">Játékkal kapcsolatos</option>
-                                <option value="account">Fiók kezelés</option>
-                                <option value="suggestion">Javaslat</option>
-                                <option value="other">Egyéb</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message">Üzenet *</label>
-                            <textarea id="message" name="message" rows="6" required placeholder="Írd le részletesen, miben tudunk segíteni..."></textarea>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn">Üzenet küldése</button>
-                    </form>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">E-mail cím *</label>
+                                <input type="email" class="form-control" id="email" name="email" required 
+                                       placeholder="pelda@email.com" value="{{ user.email if user else '' }}"
+                                       {% if user %}readonly{% endif %}>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Tárgy</label>
+                                <select class="form-select" id="subject" name="subject">
+                                    <option value="general">Általános kérdés</option>
+                                    <option value="technical">Technikai probléma</option>
+                                    <option value="game">Játékkal kapcsolatos</option>
+                                    <option value="account">Fiók kezelés</option>
+                                    <option value="suggestion">Javaslat</option>
+                                    <option value="other">Egyéb</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Üzenet *</label>
+                                <textarea class="form-control" id="message" name="message" rows="5" required placeholder="Írd le részletesen, miben tudunk segíteni..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-gradient-primary w-100">Üzenet küldése</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
-            <!-- Kapcsolati információk -->
-            <div class="contact-info-section">
-                <div class="contact-card">
-                    <h2>📍 Elérhetőségek</h2>
-                    <div class="info-item">
-                        <div class="info-icon">📧</div>
-                        <div class="info-content">
-                            <h4>E-mail</h4>
-                            <p>info@onlinejatekok.hu</p>
-                            <p class="info-detail">Válaszidő: 24-48 óra</p>
+            <div class="col-lg-6">
+                <div class="card glass-card mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="card-title mb-4">Elérhetőségek</h3>
+                        <div class="d-flex align-items-start mb-3">
+                            <i class="bi bi-envelope-fill fs-4 text-primary me-3"></i>
+                            <div>
+                                <h5>E-mail</h5>
+                                <p class="text-muted mb-0">info@onlinejatekok.hu</p>
+                                <small class="text-muted">Válaszidő: 24-48 óra</small>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-icon">⏰</div>
-                        <div class="info-content">
-                            <h4>Nyitvatartás</h4>
-                            <p>Hétfő - Péntek: 9:00 - 18:00</p>
-                            <p class="info-detail">Hétvégén: Csak e-mail</p>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-icon">💬</div>
-                        <div class="info-content">
-                            <h4>Közösségi média</h4>
-                            <p>Facebook | Twitter | Instagram</p>
-                            <p class="info-detail">@onlinejatekok</p>
+                        <div class="d-flex align-items-start mb-3">
+                            <i class="bi bi-clock-fill fs-4 text-primary me-3"></i>
+                            <div>
+                                <h5>Nyitvatartás</h5>
+                                <p class="text-muted mb-0">Hétfő - Péntek: 9:00 - 18:00</p>
+                                <small class="text-muted">Hétvégén: Csak e-mail</small>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="contact-card">
-                    <h2>💡 Mielőtt írsz...</h2>
-                    <ul class="tips-list">
-                        <li>✅ Nézd meg a <a href="{{ url_for('gyik') }}">Gyakori Kérdéseket</a></li>
-                        <li>✅ Olvasd el a <a href="{{ url_for('help_page') }}">Súgót</a></li>
-                        <li>✅ Ellenőrizd az e-mail címed</li>
-                        <li>✅ Legyél részletes a problémával</li>
-                    </ul>
-                </div>
-
-                <div class="contact-card highlight-card">
-                    <h3>🚀 Gyors válasz kell?</h3>
-                    <p>A legtöbb kérdésre választ találsz a Gyakori Kérdések oldalon!</p>
-                    <a href="{{ url_for('gyik') }}" class="help-btn">GYIK megtekintése</a>
+                <div class="card glass-card">
+                    <div class="card-body p-4">
+                        <h5 class="card-title">💡 Mielőtt írsz...</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-transparent">✅ Nézd meg a <a href="{{ url_for('gyik') }}" class="text-decoration-none">Gyakori Kérdéseket</a></li>
+                            <li class="list-group-item bg-transparent">✅ Olvasd el a <a href="{{ url_for('help_page') }}" class="text-decoration-none">Súgót</a></li>
+                            <li class="list-group-item bg-transparent">✅ Legyél részletes a problémával</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const userIcon = document.getElementById('userIcon');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    userIcon.addEventListener('click', function(e) {
-        e.stopPropagation();
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
-    document.addEventListener('click', function() {
-        dropdownMenu.style.display = 'none';
-    });
-});
-</script>
 </body>
 </html>

@@ -1,158 +1,51 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <title>Akció Játékok - Online Játékok</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% from 'partials/head.html' import head %}
+    {{ head('Akció Játékok - Online Játékok') }}
 </head>
-<body>
-    <div class="header">
-        <div class="title">
-            <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">Online Játékok</a>
+<body data-theme="{{ user.theme if user else 'colored' }}" {% if user and not user.animations_enabled %}class="no-animations"{% endif %}>
+    {% from 'partials/navbar.html' import navbar %}
+    {{ navbar(username) }}
+
+    <div class="container my-5">
+        <div class="text-center text-white mb-5">
+            <h1 class="display-4 fw-bold">🎮 Akció Játékok</h1>
+            <p class="lead">Gyors reflexek, intenzív csaták és izgalmas kalandok!</p>
         </div>
-        <div class="header-controls">
-            {% if username %}
-                <span class="username-display">{{ username }}</span>
-            {% else %}
-                <a href="{{ url_for('login_page') }}" class="header-login-link">Bejelentkezés</a>
-            {% endif %}
-            <div class="dropdown">
-                <a href="javascript:void(0);" class="user-icon" id="userIcon" title="Profil">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-                      <circle cx="16" cy="12" r="8" fill="#007bff"/>
-                      <ellipse cx="16" cy="26" rx="10" ry="6" fill="#007bff"/>
-                    </svg>
-                </a>
-                <div class="dropdown-content" id="dropdownMenu">
-                    {% if username %}
-                        <a href="{{ url_for('beallitasok') }}">Beállítások</a>
-                        <a href="{{ url_for('help_page') }}">Help</a>
-                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
-                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
-                        <a href="{{ url_for('logout') }}">Kijelentkezés</a>
-                    {% else %}
-                        <a href="{{ url_for('login_page') }}">Bejelentkezés</a>
-                        <a href="{{ url_for('register') }}">Regisztráció</a>
-                        <a href="{{ url_for('help_page') }}">Help</a>
-                        <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a>
-                        <a href="{{ url_for('gyik') }}">Gyakori kérdések</a>
-                    {% endif %}
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card glass-card hover-lift h-100">
+                    <div class="card-header" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f); height: 200px;"></div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Shadow Strike</h5>
+                        <p class="card-text text-muted">Légy a végső harcos ebben az intenzív akció játékban.</p>
+                        <button class="btn btn-sm btn-gradient-primary w-100"><i class="bi bi-play-fill"></i> Játék</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card glass-card hover-lift h-100">
+                    <div class="card-header" style="background: linear-gradient(135deg, #4facfe, #00f2fe); height: 200px;"></div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Cyber Warriors</h5>
+                        <p class="card-text text-muted">Futurisztikus harcok a kibertérben.</p>
+                        <button class="btn btn-sm btn-gradient-primary w-100"><i class="bi bi-play-fill"></i> Játék</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card glass-card hover-lift h-100">
+                    <div class="card-header" style="background: linear-gradient(135deg, #f093fb, #f5576c); height: 200px;"></div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Dragon Assault</h5>
+                        <p class="card-text text-muted">Repülj sárkányokon és hódítsd meg az égboltot!</p>
+                        <button class="btn btn-sm btn-gradient-primary w-100"><i class="bi bi-play-fill"></i> Játék</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="header-subtitle">Itt lesznek a legjobb online játékok!</div>
     </div>
-
-    <div class="category-page-header">
-        <h1>🎮 Akció Játékok</h1>
-        <p>Gyors reflexek, intenzív csaták és izgalmas kalandok!</p>
-    </div>
-
-    <div class="games-container">
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Shadow Strike</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Légy a végső harcos ebben az intenzív akció játékban. Küzdj meg ellenséges erőkkel, használj különleges képességeket és mentsd meg a világot!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Cyber Warriors</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Futurisztikus harcok a kibertérben. Hackeld meg az ellenséges rendszereket és irányítsd a csatamezőt digitális fegyverekkel!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Dragon Assault</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Repülj sárkányokon és hódítsd meg az égboltot! Epikus légi csaták varázslatos lényekkel és ősi erőkkel.</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #a8edea, #fed6e3);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Zombie Defense</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">A zombi apokalipszis megérkezett! Védd meg a bázisod, építs tornyokat és túlélj az élőhalott hordák ellen!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Ninja Legends</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Légy a legendás ninja! Lopakodj az árnyékokban, használj shurikeneket és hajtsd végre a tökéletes merényleteket.</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #ffecd2, #fcb69f);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Space Invaders 3D</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Klasszikus űrlövölde modern köntösben! Védd meg a Földet az idegen invázió ellen 3D grafikkával!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Battle Royale Arena</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">100 játékos, egy arléna! Légy az utolsó túlélő ebben a gyors tempójú battle royale játékban!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #fad0c4, #ffd1ff);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Mech Warriors</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Irányíts óriási robotokat epikus csatákban! Testreszabható mechek, erős fegyverek és stratégiai hadviselés!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #a1c4fd, #c2e9fb);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Pirate Clash</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Kalózok tengeri csatája! Hajózz a hét tengeren, harcolj más kalózokkal és gyűjtsd össze a kincseket!</p>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-image" style="background: linear-gradient(135deg, #84fab0, #8fd3f4);"></div>
-            <div class="game-info">
-                <h3 class="game-title">Superhero Smash</h3>
-                <button class="game-description-toggle">Részletek ▼</button>
-                <p class="game-description">Szuperhősök ultimate összecsapása! Válassz kedvenc hősöd közül és harcolj a világuralomért!</p>
-            </div>
-        </div>
-    </div>
-
-    <script src="{{ url_for('static', filename='js/game-cards.js') }}"></script>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const userIcon = document.getElementById('userIcon');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    userIcon.addEventListener('click', function(e) {
-        e.stopPropagation();
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
-    document.addEventListener('click', function() {
-        dropdownMenu.style.display = 'none';
-    });
-});
-</script>
 </body>
 </html>

@@ -353,6 +353,8 @@ Ez egy oktatási projekt.
 ## 🤝 Közreműködés
 
 Patrik - Fejlesztő
+Erik - Fejlesztő
+László - Fejlesztő
 
 ---
 

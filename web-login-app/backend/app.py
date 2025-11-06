@@ -44,6 +44,7 @@ games_data = [
     }
 ]
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+import os
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -426,6 +427,21 @@ def delete_account():
     session.pop('username', None)
     
     return jsonify({'success': True, 'message': f'{username} fiók sikeresen törölve!'})
+
+
+@app.route('/play/<game_name>')
+def play_game(game_name):
+    """Render an embedded page that loads the game's index.html from static/games/<game_name>/index.html"""
+    username = session.get('username')
+    user = get_user_settings()
+
+    # Validate the game directory exists under static/games
+    static_game_path = os.path.join(app.static_folder or 'static', 'games', game_name)
+    if not os.path.isdir(static_game_path):
+        abort(404)
+
+    iframe_src = url_for('static', filename=f'games/{game_name}/index.html')
+    return render_template('game_embed.html', username=username, user=user, game_name=game_name, iframe_src=iframe_src)
 
 if __name__ == '__main__':
     with app.app_context():

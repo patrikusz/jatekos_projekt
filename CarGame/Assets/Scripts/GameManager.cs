@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    //Scoreboard scoreboardScript;
     [SerializeField] public AudioSource coinPickUpSource;
     [SerializeField] public AudioClip coinPickUpSound;
     [SerializeField] TextMeshProUGUI carOrBusText, scoreText, timeText, gameOverText;
@@ -20,7 +19,7 @@ public class GameManager : MonoBehaviour
     public GameObject currentPlayer;
     private int maxCoin = 5, countCoin = 0, index = -1, carOrBusNum, randomNum;
     public bool hasSpawned = false, isGameOver = false, isChoosing, cursorLocked = false;
-    public float humanSpeed;
+    public float humanSpeed, score;
     private bool hasStarted = false;
     public int timeCounter = 0;
 
@@ -83,7 +82,6 @@ public class GameManager : MonoBehaviour
     public void DiffButtonHandler()
     {
         difficulty.gameObject.SetActive(false);
-        //scoreboardScript.GetComponent<Scoreboard>().scoreboardButton.gameObject.SetActive(false);
         carOrBusText.gameObject.SetActive(true);
     }
 
@@ -339,6 +337,7 @@ public class GameManager : MonoBehaviour
 
             if (isWin)
             {
+                score = timeCounter;
                 gameOverText.SetText("Your time : {0} sec", timeCounter);
             }
             else

@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public float speed, rotationSpeed;
     Rigidbody rb;
     AudioForVehicles audioForVehicles;
-    float verticalInput;
+    float verticalInput, horizontalInput;
 
     private void Start()
     {
@@ -19,15 +19,20 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxis("Horizontal");
+
         rb.AddForce(transform.forward * speed * verticalInput, ForceMode.Force);
 
-        //float horizontalInput = Input.GetAxis("Horizontal");
-        //rb.AddTorque(transform.up * rotationSpeed * Time.deltaTime * horizontalInput, ForceMode.Impulse);
+        if (rb.velocity.magnitude > 0.5f)
+        {
+            Quaternion turnOffset = Quaternion.Euler(0, horizontalInput * rotationSpeed * Time.fixedDeltaTime, 0);
+            rb.MoveRotation(rb.rotation * turnOffset);
+        }
     }
 
     void Update()
     {
-        if (rb.velocity.magnitude > 0.5f)
+       /* if (rb.velocity.magnitude > 0.5f)
         {
             float horizontalInput = Input.GetAxis("Horizontal");
             transform.Rotate(Vector3.up, horizontalInput * rotationSpeed * Time.deltaTime);
@@ -35,13 +40,8 @@ public class PlayerController : MonoBehaviour
         
 
         //float verticalInput = Input.GetAxis("Vertical");
-        //transform.Translate(Vector3.forward * speed * Time.deltaTime * verticalInput);
+        //transform.Translate(Vector3.forward * speed * Time.deltaTime * verticalInput);*/
 
-    }
-
-    protected virtual float GetVerticalInput()
-    {
-        return Input.GetAxis("Vertical");
     }
 
 }

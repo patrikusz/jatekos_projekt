@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    {% from 'partials/head.html' import head %}
+    {{ head('Játék — {{ game_name }}') }}
+    <style>
+        /* Ensure iframe fills area nicely */
+        .game-frame { width: 100%; height: calc(100vh - 120px); border: none; }
+        .play-container { padding: 1rem 0; }
+    </style>
+</head>
+<body data-theme="{{ user.theme if user else 'colored' }}" {% if user and not user.animations_enabled %}class="no-animations"{% endif %}>
+    {% from 'partials/navbar.html' import navbar %}
+    {{ navbar(username) }}
+
+    <div class="container play-container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0">Játék: {{ game_name }}</h3>
+            <a href="{{ url_for('verseny') }}" class="btn btn-outline-light"><i class="bi bi-arrow-left"></i> Vissza a versenyekhez</a>
+        </div>
+
+        <div class="card glass-card">
+            <div class="card-body p-0">
+                <iframe class="game-frame" src="{{ iframe_src }}" title="{{ game_name }} játék"></iframe>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

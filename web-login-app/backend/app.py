@@ -1,3 +1,48 @@
+from flask import abort
+games_data = [
+    {
+        'category': 'Akció',
+        'icon': '🎮',
+        'name': 'Shadow Strike',
+        'desc': 'Légy a végső harcos ebben az intenzív akció játékban.',
+    },
+    {
+        'category': 'Akció',
+        'icon': '🎮',
+        'name': 'Cyber Warriors',
+        'desc': 'Futurisztikus harcok a kibertérben.',
+    },
+    {
+        'category': 'Akció',
+        'icon': '🎮',
+        'name': 'Dragon Assault',
+        'desc': 'Repülj sárkányokon és hódítsd meg az égboltot!',
+    },
+    {
+        'category': 'Logikai',
+        'icon': '🧩',
+        'name': 'Puzzle Master',
+        'desc': 'Teszteld a logikádat ezzel a rejtvényjátékkal.',
+    },
+    {
+        'category': 'Verseny',
+        'icon': '🏎️',
+        'name': 'Speed Racer',
+        'desc': 'Versenyezz a leggyorsabb autókkal!',
+    },
+    {
+        'category': 'Sport',
+        'icon': '⚽',
+        'name': 'Football Pro',
+        'desc': 'Légy a legjobb futballista!',
+    },
+    {
+        'category': 'Retro',
+        'icon': '👾',
+        'name': 'Pac-Man Reborn',
+        'desc': 'A klasszikus Pac-Man újragondolva!',
+    }
+]
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -43,7 +88,60 @@ def get_user_settings():
 def home():
     username = session.get('username')
     user = get_user_settings()
-    return render_template('home.html', username=username, user=user)
+    # Kategóriák adatai
+    categories = [
+        {
+            'name': 'Akció',
+            'icon': '🎮',
+            'desc': 'Gyors reflexek és izgalmas kalandok',
+            'url': url_for('akcio')
+        },
+        {
+            'name': 'Logikai',
+            'icon': '🧩',
+            'desc': 'Gondolkodtató feladványok',
+            'url': url_for('logikai')
+        },
+        {
+            'name': 'Verseny',
+            'icon': '🏎️',
+            'desc': 'Gyorsaság és adrenalin',
+            'url': url_for('verseny')
+        },
+        {
+            'name': 'Sport',
+            'icon': '⚽',
+            'desc': 'Virtuális sportélmények',
+            'url': url_for('sport')
+        },
+        {
+            'name': 'Retro',
+            'icon': '👾',
+            'desc': 'Klasszikus játékok',
+            'url': url_for('retro')
+        }
+    ]
+    return render_template('home.html', username=username, user=user, categories=categories, search_mode=False)
+@app.route('/search')
+def search():
+    username = session.get('username')
+    user = get_user_settings()
+    query = request.args.get('q', '').strip().lower()
+    # Szűrés játék névre
+    filtered = [game for game in games_data if query in game['name'].lower()]
+    # Minden játékhoz egyedi url
+    for game in filtered:
+        game['url'] = url_for('game_detail', name=game['name'].replace(' ', '-').lower())
+    return render_template('home.html', username=username, user=user, games=filtered, search_mode=True, search_query=query)
+@app.route('/game/<name>')
+def game_detail(name):
+    username = session.get('username')
+    user = get_user_settings()
+    # Keresés a játékok között
+    game = next((g for g in games_data if g['name'].replace(' ', '-').lower() == name), None)
+    if not game:
+        abort(404)
+    return render_template('game_detail.html', username=username, user=user, game=game)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():

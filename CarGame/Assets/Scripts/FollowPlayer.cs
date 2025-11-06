@@ -22,7 +22,31 @@ public class FollowPlayer : MonoBehaviour
 
     void Update()
     {
-        if (gameManager.GetComponent<GameManager>().cursorLocked)
+        if (gameManager == null)
+        {
+            var gamem = gameManager.GetComponent<GameManager>();
+            if (gamem == null)
+            {
+                var dummy = gameManager.GetComponent<DummyGameManager>();
+                if (dummy == null) return;
+
+                if (dummy.cursorLocked)
+                {
+                    rotationX += Input.GetAxis("Mouse X") * lookSpeed;
+                    rotationY -= Input.GetAxis("Mouse Y") * lookSpeed;
+                    rotationY = Mathf.Clamp(rotationY, -90f, 90f);
+                    transform.localRotation = Quaternion.Euler(rotationY, rotationX, 0);
+                }
+
+                return;
+            }
+        }
+
+        var gm = gameManager.GetComponent<GameManager>();
+        if (gm == null)
+            return;
+
+        if (gm.cursorLocked)
         {
             rotationX += Input.GetAxis("Mouse X") * lookSpeed;
             rotationY -= Input.GetAxis("Mouse Y") * lookSpeed;
@@ -31,7 +55,7 @@ public class FollowPlayer : MonoBehaviour
         }
     }
 
-    void LateUpdate()
+    public void LateUpdate()
     {
         if (player != null)
         {

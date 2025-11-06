@@ -7,18 +7,52 @@ using UnityEngine.UI;
 public class Scoreboard : MonoBehaviour
  
 {
-    public float score = 0;
+    public float highScore = 0;
     GameObject gameManager;
     // Start is called before the first frame update
     void Start()
     {
         gameManager = GameObject.Find("GameManager");
+
+        if (gameManager == null)
+        {
+            Debug.LogWarning("GameManager not found in scene — using DummyGameManager for testing.");
+            gameManager = new GameObject("GameManager");
+            gameManager.AddComponent<DummyGameManager>();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Update()
     {
-        score = gameManager.GetComponent<GameManager>().score;
+        if (gameManager == null)
+            return;
+
+        var gm = gameManager.GetComponent<GameManager>();
+        if (gm != null)
+        {
+            HighScore(gm.win, gm.score);
+            return;
+        }
+
+        var dummy = gameManager.GetComponent<DummyGameManager>();
+        if (dummy == null)
+        {
+            dummy = gameManager.AddComponent<DummyGameManager>();
+        }
+
+        HighScore(dummy.win, dummy.score);
+    }
+
+
+    public void HighScore(bool isWin, float score)
+    {
+        if (isWin == true)
+        {
+            if (highScore <= score)
+            {
+                highScore = score;
+            }
+        }
     }
 
  

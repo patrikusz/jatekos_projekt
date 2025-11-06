@@ -11,13 +11,11 @@ public class PickUp : MonoBehaviour
         gameManager = GameObject.Find("GameManager");
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other) { 
         gameManager.GetComponent<GameManager>().coinPickUpSource.PlayOneShot(gameManager.GetComponent<GameManager>().coinPickUpSound);
         gameManager.GetComponent<GameManager>().CoinCollector();
         gameManager.GetComponent<GameManager>().SpawnCoin();
-        Destroy(this.gameObject);
-    }
+        Destroy(this.gameObject); }
 
     // Update is called once per frame
     void Update()

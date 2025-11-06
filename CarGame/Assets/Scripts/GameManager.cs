@@ -18,15 +18,15 @@ public class GameManager : MonoBehaviour
     CapsuleCollider coinCollider;
     public GameObject currentPlayer;
     private int maxCoin = 5, countCoin = 0, index = -1, carOrBusNum, randomNum;
-    public bool hasSpawned = false, isGameOver = false, isChoosing, cursorLocked = false;
-    public float humanSpeed, score;
+    public bool hasSpawned = false, isGameOver = false, isChoosing, cursorLocked = false, win = false;
+    public float humanSpeed, score = 0;
     private bool hasStarted = false;
     public int timeCounter = 0;
 
 
     void Start()
     {
-
+        win = false;
         isChoosing = false;
         isGameOver = false;
 
@@ -337,6 +337,7 @@ public class GameManager : MonoBehaviour
 
             if (isWin)
             {
+                win = true;
                 score = timeCounter;
                 gameOverText.SetText("Your time : {0} sec", timeCounter);
             }

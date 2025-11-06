@@ -7,7 +7,7 @@ public class BackgroundMusic : MonoBehaviour
     [SerializeField] AudioSource musicSource;
     [SerializeField] AudioClip musicSound;
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         musicSource.clip = musicSound;
         musicSource.volume = 0.5f;

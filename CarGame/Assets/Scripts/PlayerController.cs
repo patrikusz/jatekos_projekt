@@ -39,6 +39,10 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    protected virtual float GetVerticalInput()
+    {
+        return Input.GetAxis("Vertical");
+    }
 
 }
 

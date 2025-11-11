@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    {% from 'partials/head.html' import head %}
+    {{ head('Online Játékok') }}
+</head>
+<body data-theme="{{ user.theme if user else 'colored' }}" {% if user and not user.animations_enabled %}class="no-animations"{% endif %}>
+    {% from 'partials/navbar.html' import navbar %}
+    {{ navbar(username) }}
+
+    <div class="container my-5">
+        <!-- Hero Section -->
+        <div class="text-center text-white mb-5">
+            <h1 class="display-3 fw-bold gradient-text mb-3">🎮 Online Játékok</h1>
+            <p class="lead">Itt lesznek a legjobb online játékok!</p>
+        </div>
+
+        <!-- Search Bar -->
+        <form method="GET" action="{{ url_for('search') }}" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Keresés kategóriára vagy leírásra..." required>
+                <button class="btn btn-gradient-primary" type="submit">Keresés</button>
+            </div>
+        </form>
+
+        <!-- Keresési eredmények játékokra -->
+        {% if search_mode %}
+            <h4 class="mb-4 text-center text-warning">Keresési eredmények: <span class="fw-bold">{{ search_query }}</span></h4>
+            {% if games is defined %}
+                {% if games|length == 0 %}
+                    <div class="alert alert-warning text-center">Nincs találat!</div>
+                {% endif %}
+                <div class="row g-4">
+                    {% for game in games %}
+                    <div class="col-md-6 col-lg-4">
+                        <a href="{{ game.url }}" class="text-decoration-none">
+                            <div class="card glass-card hover-lift h-100 text-center p-4">
+                                <div class="card-body">
+                                    <div class="category-icon display-1 mb-3">{{ game.icon }}</div>
+                                    <h3 class="card-title fw-bold">{{ game.name }}</h3>
+                                    <p class="card-text text-muted">{{ game.desc }}</p>
+                                    <span class="badge bg-primary">{{ game.category }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% else %}
+            <!-- Eredeti kategória kártyák -->
+            <div class="row g-4">
+                {% for cat in categories %}
+                <div class="col-md-6 col-lg-4">
+                    <a href="{{ cat.url }}" class="text-decoration-none">
+                        <div class="card glass-card hover-lift h-100 text-center p-4">
+                            <div class="card-body">
+                                <div class="category-icon display-1 mb-3">{{ cat.icon }}</div>
+                                <h3 class="card-title fw-bold">{{ cat.name }}</h3>
+                                <p class="card-text text-muted">{{ cat.desc }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

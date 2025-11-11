@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    {% from 'partials/head.html' import head %}
+    {{ head('Retro Játékok - Online Játékok') }}
+</head>
+<body data-theme="{{ user.theme if user else 'colored' }}" {% if user and not user.animations_enabled %}class="no-animations"{% endif %}>
+    {% from 'partials/navbar.html' import navbar %}
+    {{ navbar(username) }}
+    <div class="container my-5">
+        <div class="text-center text-white mb-5">
+            <h1 class="display-4 fw-bold">👾 Retro Játékok</h1>
+            <p class="lead">Klasszikus játékok modern köntösben!</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card glass-card hover-lift h-100">
+                    <div class="card-header" style="background: linear-gradient(135deg, #a1c4fd, #c2e9fb); height: 200px;"></div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Pac-Man Reborn</h5>
+                        <p class="card-text text-muted">A klasszikus Pac-Man újragondolva!</p>
+                        <button class="btn btn-sm btn-gradient-primary w-100"><i class="bi bi-play-fill"></i> Játék</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

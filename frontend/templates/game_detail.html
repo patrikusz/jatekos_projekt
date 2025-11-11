@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    {% from 'partials/head.html' import head %}
+    {{ head(game.name ~ ' - Online Játékok') }}
+</head>
+<body data-theme="{{ user.theme if user else 'colored' }}" {% if user and not user.animations_enabled %}class="no-animations"{% endif %}>
+    {% from 'partials/navbar.html' import navbar %}
+    {{ navbar(username) }}
+    <div class="container my-5">
+        <div class="text-center text-white mb-5">
+            <h1 class="display-4 fw-bold">{{ game.icon }} {{ game.name }}</h1>
+            <span class="badge bg-primary mb-2">{{ game.category }}</span>
+            <p class="lead">{{ game.desc }}</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card glass-card hover-lift h-100">
+                    <div class="card-body text-center">
+                        <button class="btn btn-lg btn-gradient-primary w-100"><i class="bi bi-play-fill"></i> Játék indítása</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

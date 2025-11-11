@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    {% from 'partials/head.html' import head %}
+    {{ head('GYIK - Online Játékok') }}
+</head>
+<body data-theme="{{ user.theme if user else 'colored' }}" {% if user and not user.animations_enabled %}class="no-animations"{% endif %}>
+    {% from 'partials/navbar.html' import navbar %}
+    {{ navbar(username) }}
+    <div class="container my-5">
+        <div class="text-center text-white mb-5">
+            <h1 class="display-4 fw-bold"><i class="bi bi-book"></i> Gyakori Kérdések</h1>
+            <p class="lead">Válaszok a leggyakoribb kérdésekre</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item glass-card mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                Hogyan regisztrálhatok?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Kattints a "Regisztráció" gombra a főoldalon, add meg a felhasználóneved és jelszavad, majd kattints a "Regisztráció" gombra. Ennyi az egész!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item glass-card mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Ingyenes a platform használata?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Igen, az Online Játékok platform teljesen ingyenes! Nincs rejtett költség vagy előfizetési díj.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item glass-card mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Mikor válaszoltok az üzenetemre?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Az adminisztrátorok emailben válaszolnak a beérkezett üzenetekre, általában 24-48 órán belül. Kérjük, ellenőrizd a spam mappádat is!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item glass-card mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                Mit tegyek, ha elfelejtettem a jelszavam?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Jelenleg a jelszó visszaállítás funkció fejlesztés alatt áll. Kérjük, vedd fel velünk a kapcsolatot a Kapcsolat oldalon, és segítünk.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item glass-card mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                Hogyan jelenthetem, ha hibát találtam?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Használd a <a href="{{ url_for('kapcsolat') }}">Kapcsolat</a> oldalt és válaszd a "Technikai probléma" opciót. Minél részletesebb leírást adsz, annál gyorsabban tudunk segíteni!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card glass-card border-primary mt-5">
+                    <div class="card-body p-4 text-center">
+                        <h3 class="mb-3">Nem találtad a választ?</h3>
+                        <p class="mb-3">Lépj velünk kapcsolatba és szívesen segítünk!</p>
+                        <div class="d-flex gap-3 justify-content-center flex-wrap">
+                            <a href="{{ url_for('kapcsolat') }}" class="btn btn-gradient-primary"><i class="bi bi-envelope"></i> Kapcsolatfelvétel</a>
+                            <a href="{{ url_for('help_page') }}" class="btn btn-outline-light"><i class="bi bi-question-circle"></i> Súgó</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

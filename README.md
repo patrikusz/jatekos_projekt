@@ -8,38 +8,46 @@ Modern, játékos témájú webalkalmazás Flask backend-del, dinamikus témákk
 jatekos_projekt/
 ├── .gitignore                 # Git figyelmen kívül hagyandó fájlok
 ├── .venv/                     # Python virtual environment (NE commitold!)
-├── instance/                  # Adatbázis mappa (NE commitold!)
-│   └── users.db              # SQLite adatbázis
-├── Meeting.md                 # Projekt meeting jegyzetek
+├── kovspec.md                 # Követelmény specifikáció
+├── meeting.md                 # Projekt meeting jegyzetek
 ├── README.md                  # Projekt főoldal dokumentáció
-├── User_Storyk.md            # User story-k
-└── web-login-app/            # Fő alkalmazás mappa
-    ├── README.md             # Alkalmazás dokumentáció
-    └── backend/              # Flask backend alkalmazás
-        ├── app.py            # Fő Flask alkalmazás
-        ├── migrate_contact_system.py  # Adatbázis migráció script
-        ├── requirements.txt  # Python függőségek
-        ├── README.md         # Backend dokumentáció
-        ├── static/          # Statikus fájlok (CSS, JS, képek)
-        │   └── css/
-        │       └── custom.css        # Egyedi stílusok és témák
-        └── templates/       # Jinja2 HTML template-ek
-            ├── partials/            # Újrafelhasználható részek
-            │   ├── head.html        # <head> makro
-            │   └── navbar.html      # Navbar makró
-            ├── home.html            # Főoldal
-            ├── login.html           # Bejelentkezés
-            ├── register.html        # Regisztráció (név + email)
-            ├── beallitasok.html     # Felhasználói beállítások
-            ├── akcio.html           # Akció játékok kategória
-            ├── logikai.html         # Logikai játékok kategória
-            ├── verseny.html         # Verseny játékok kategória
-            ├── sport.html           # Sport játékok kategória
-            ├── retro.html           # Retro játékok kategória
-            ├── help.html            # Súgó oldal
-            ├── kapcsolat.html       # Kapcsolatfelvétel
-            ├── gyik.html            # Gyakori kérdések
-            └── admin_messages.html  # Admin üzenetek kezelő
+├── user_storyk.md            # User story-k
+├── backend/                   # Flask backend alkalmazás
+│   ├── app.py                # Fő Flask alkalmazás
+│   ├── requirements.txt      # Python függőségek
+│   └── instance/             # Adatbázis mappa (NE commitold!)
+│       └── users.db          # SQLite adatbázis
+├── frontend/                  # Frontend fájlok
+│   ├── static/               # Statikus fájlok (CSS, JS, képek)
+│   │   ├── css/             # Stíluslapok
+│   │   │   └── custom.css   # Egyedi stílusok és témák
+│   │   └── games/           # Beágyazott játékok
+│   ├── templates/            # Jinja2 HTML template-ek
+│   │   ├── partials/        # Újrafelhasználható részek
+│   │   │   ├── head.html    # <head> makro
+│   │   │   └── navbar.html  # Navbar makró
+│   │   ├── home.html        # Főoldal
+│   │   ├── login.html       # Bejelentkezés
+│   │   ├── register.html    # Regisztráció (név + email)
+│   │   ├── beallitasok.html # Felhasználói beállítások
+│   │   ├── akcio.html       # Akció játékok kategória
+│   │   ├── logikai.html     # Logikai játékok kategória
+│   │   ├── verseny.html     # Verseny játékok kategória
+│   │   ├── sport.html       # Sport játékok kategória
+│   │   ├── retro.html       # Retro játékok kategória
+│   │   ├── help.html        # Súgó oldal
+│   │   ├── kapcsolat.html   # Kapcsolatfelvétel
+│   │   ├── gyik.html        # Gyakori kérdések
+│   │   └── admin_messages.html  # Admin üzenetek kezelő
+│   └── WebCarGame/           # Unity WebGL build
+│       ├── index.html       # Játék betöltő oldal
+│       ├── Build/           # Unity build fájlok
+│       └── TemplateData/    # Unity template fájlok
+└── jatekok/                  # Játékok forráskódja
+    └── cargame_unity/        # Unity CarGame projekt
+        ├── Assets/          # Unity assets
+        ├── Packages/        # Unity packages
+        └── ProjectSettings/ # Unity beállítások
 ```
 
 ## 🚀 Gyors Kezdés
@@ -60,25 +68,18 @@ python -m venv .venv
 ### 2. Függőségek telepítése
 
 ```powershell
-cd web-login-app\backend
+cd backend
 pip install -r requirements.txt
 ```
 
-### 3. Adatbázis migráció (ha már létező adatbázis van)
+### 3. Alkalmazás indítása
 
 ```powershell
-# Biztonságos adatbázis frissítés
-python migrate_contact_system.py
-```
-
-### 4. Alkalmazás indítása
-
-```powershell
-# Még mindig a backend mappában
+# A backend mappában
 python app.py
 ```
 
-### 5. Böngészőben megnyitás
+### 4. Böngészőben megnyitás
 
 Nyisd meg: `http://127.0.0.1:5000/`
 
@@ -270,17 +271,12 @@ status: String(50) (Default: 'new')             # new/read/replied
 
 ### Adatbázis Migráció Futtatása
 
-Ha frissíted a modelleket:
-
-```powershell
-cd web-login-app\backend
-python migrate_contact_system.py
-```
+Ha frissíted a modelleket, az adatbázis automatikusan létrejön az első futtatáskor.
 
 ### Új Témaszín Hozzáadása
 
-1. Adj hozzá új `body[data-theme="nev"]` szabályt a `custom.css`-ben
-2. Frissítsd a `beallitasok.html` téma választót
+1. Adj hozzá új `body[data-theme="nev"]` szabályt a `frontend/static/css/custom.css`-ben
+2. Frissítsd a `frontend/templates/beallitasok.html` téma választót
 3. Add hozzá a navbar és egyéb elemek stílusait
 
 ### Új Template Készítése
@@ -356,8 +352,43 @@ Patrik - Fejlesztő
 Erik - Fejlesztő
 László - Fejlesztő
 
+## 📄 Dokumentáció
+
+A projekt részletes dokumentációja a következő fájlokban található:
+
+- **[README.md](README.md)** - Telepítési útmutató, funkciók, API végpontok
+- **[kovspec.md](kovspec.md)** - Követelmény specifikáció, use case-ek
+- **[rendszerterv.md](rendszerterv.md)** - Rendszerterv, architektúra, implementáció
+- **[user_storyk.md](user_storyk.md)** - User story-k Gherkin formátumban (30 db)
+- **[meeting.md](meeting.md)** - Meeting jegyzetek és döntések
+
 ---
 
-**Verzió:** 2.0.0  
-**Utolsó frissítés:** 2025. november 4.  
-**Főbb változások:** Téma rendszer, kapcsolatfelvételi rendszer, admin felület, beállítások oldal
+## 🎮 Unity CarGame
+
+A projekt tartalmaz egy Unity WebGL játékot is:
+
+- **Forráskód:** `jatekok/cargame_unity/` - Unity projekt fájlok
+- **WebGL Build:** `frontend/WebCarGame/` - Böngészőben futtatható build
+- **Játék elérése:** A webalkalmazásban beágyazva elérhető
+
+### Unity Projekt Struktúra
+
+```
+jatekok/cargame_unity/
+├── Assets/           # Unity eszközök és szkriptek
+├── Packages/         # Unity package-ek
+└── ProjectSettings/  # Unity beállítások
+```
+
+---
+
+**Verzió:** 2.1.0  
+**Utolsó frissítés:** 2025. november 11.  
+**Főbb változások:**
+
+- Projekt struktúra átrendezése (backend/frontend/jatekok)
+- Unity CarGame integráció
+- Téma rendszer továbbfejlesztése
+- Kapcsolatfelvételi rendszer, admin felület
+- Útvonalak és referenciák frissítése

@@ -455,6 +455,8 @@ def play_game(game_name):
     return render_template('game_embed.html', username=username, user=user, game_name=game_name, iframe_src=iframe_src)
 
 if __name__ == '__main__':
+    # Ensure the instance directory for the SQLite DB exists so db.create_all() can create the file
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     with app.app_context():
         db.create_all()
     app.run(debug=True)

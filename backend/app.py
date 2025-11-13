@@ -1,4 +1,9 @@
 from flask import abort
+from dotenv import load_dotenv
+
+# .env fájl betöltése
+load_dotenv()
+
 games_data = [
     {
         'category': 'Akció',
@@ -52,14 +57,26 @@ from werkzeug.security import generate_password_hash, check_password_hash
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), 'frontend')
 
+# Frontend URL environment változóból
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5000')
+
 app = Flask(__name__, 
             template_folder=os.path.join(FRONTEND_DIR, 'templates'),
             static_folder=os.path.join(FRONTEND_DIR, 'static'))
-app.secret_key = 'jatekos_projekt_secret_key'
+app.secret_key = os.getenv('SECRET_KEY', 'jatekos_projekt_secret_key')
 
 # Az adatbázis útvonal a backend/instance mappában van
-DB_PATH = os.path.join(BASE_DIR, 'instance', 'users.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
+INSTANCE_DIR = os.path.join(BASE_DIR, 'instance')
+os.makedirs(INSTANCE_DIR, exist_ok=True)  # Instance mappa létrehozása, ha nem létezik
+DB_PATH = os.path.join(INSTANCE_DIR, 'users.db')
+
+# DATABASE_URL csak akkor használjuk, ha nem üres
+db_url = os.getenv('DATABASE_URL')
+if db_url and db_url.strip():
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_PATH}'
+    
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)

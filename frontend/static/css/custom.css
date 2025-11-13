@@ -575,4 +575,22 @@ body.no-animations #chatMessages > div {
     animation: none;
 }
 
+/* Notification toast container */
+.notification-toast-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.notification-toast-container .toast {
+    cursor: pointer;
+    min-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.notification-toast-container .toast:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
 

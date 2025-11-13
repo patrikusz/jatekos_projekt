@@ -612,6 +612,34 @@ def baratok():
     user = User.query.filter_by(username=username).first()
     return render_template('baratok.html', username=username, user=user)
 
+@app.route('/api/unread-messages')
+def get_unread_messages():
+    if 'username' not in session:
+        return jsonify({'success': False, 'message': 'Nem vagy bejelentkezve!'}), 401
+    
+    current_user = User.query.filter_by(username=session['username']).first()
+    
+    # Olvasatlan üzenetek száma
+    unread_count = ChatMessage.query.filter_by(receiver_id=current_user.id, read=False).count()
+    
+    # Legutóbbi olvasatlan üzenet
+    latest_message = ChatMessage.query.filter_by(receiver_id=current_user.id, read=False).order_by(ChatMessage.timestamp.desc()).first()
+    
+    latest_msg_data = None
+    if latest_message:
+        latest_msg_data = {
+            'message': latest_message.message,
+            'sender_name': latest_message.sender.name,
+            'sender_id': latest_message.sender_id,
+            'timestamp': latest_message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        }
+    
+    return jsonify({
+        'success': True,
+        'unread_count': unread_count,
+        'latest_message': latest_msg_data
+    })
+
 if __name__ == '__main__':
     # Ensure the instance directory for the SQLite DB exists so db.create_all() can create the file
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)

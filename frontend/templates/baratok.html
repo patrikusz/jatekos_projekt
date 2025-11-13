@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    {% from 'partials/head.html' import head %}
+    {{ head('Barátaim és Chat - Online Játékok') }}
+    <style>
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body data-theme="{{ user.theme if user else 'colored' }}" {% if user and not user.animations_enabled %}class="no-animations"{% endif %}>
+    {% from 'partials/navbar.html' import navbar %}
+    {{ navbar(username) }}
+
+    <!-- Toast notifications -->
+    <div class="toast-container"></div>
+
+    <div class="container my-5">
+        <div class="text-center text-white mb-5">
+            <h1 class="display-4 fw-bold"><i class="bi bi-people"></i> Barátaim és Chat</h1>
+            <p class="lead">Add hozzá barátaidat és chatelj velük!</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Barát hozzáadása panel -->
+            <div class="col-lg-4">
+                <div class="card glass-card">
+                    <div class="card-body p-4">
+                        <h5 class="card-title"><i class="bi bi-person-plus"></i> Barát hozzáadása</h5>
+                        <p class="text-muted small">Add meg egy felhasználó email címét, hogy barátnak jelöld.</p>
+                        <form id="addFriendForm">
+                            <div class="mb-3">
+                                <label for="friendEmail" class="form-label">Email cím</label>
+                                <input type="email" class="form-control" id="friendEmail" placeholder="pelda@email.com" required>
+                            </div>
+                            <button type="submit" class="btn btn-gradient-primary w-100">
+                                <i class="bi bi-plus-circle"></i> Hozzáadás
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Barátlista -->
+                <div class="card glass-card mt-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title"><i class="bi bi-people-fill"></i> Barátaim</h5>
+                        <div id="friendsList" class="list-group mt-3">
+                            <p class="text-muted text-center">Betöltés...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat panel -->
+            <div class="col-lg-8">
+                <div class="card glass-card" id="chatPanel" style="display: none;">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-chat-dots"></i> <span id="chatFriendName">Chat</span></h5>
+                        <button class="btn btn-sm btn-light" id="closeChatBtn">✕</button>
+                    </div>
+                    <div class="card-body p-4" style="height: 500px; display: flex; flex-direction: column;">
+                        <div id="chatMessages" style="flex: 1; overflow-y: auto; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f8f9fa; margin-bottom: 15px;">
+                            <!-- Üzenetek ide kerülnek -->
+                        </div>
+                        <form id="sendMessageForm">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="messageInput" placeholder="Írj egy üzenetet..." required>
+                                <button type="submit" class="btn btn-gradient-primary">
+                                    <i class="bi bi-send"></i> Küldés
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Üdvözlő üzenet ha nincs chat -->
+                <div class="card glass-card" id="noChatPanel">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-chat-dots" style="font-size: 4rem; color: #ccc;"></i>
+                        <h5 class="mt-3 text-muted">Válassz egy barátot a chathez!</h5>
+                        <p class="text-muted">Kattints egy barát nevére a bal oldali listában.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFriendId = null;
+        let chatRefreshInterval = null;
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toastHtml = `
+                <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>
+                </div>
+            `;
+            const container = document.querySelector('.toast-container');
+            container.insertAdjacentHTML('beforeend', toastHtml);
+            const toastElement = container.lastElementChild;
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+            toastElement.addEventListener('hidden.bs.toast', () => toastElement.remove());
+        }
+
+        // Barát hozzáadása
+        document.getElementById('addFriendForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('friendEmail').value;
+
+            const formData = new FormData();
+            formData.append('email', email);
+
+            try {
+                const response = await fetch('/api/add-friend', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    document.getElementById('friendEmail').value = '';
+                    loadFriends(); // Frissítjük a barátlistát
+                } else {
+                    showToast(data.message, 'error');
+                }
+            } catch (error) {
+                showToast('Hiba történt!', 'error');
+            }
+        });
+
+        // Barátlista betöltése
+        async function loadFriends() {
+            try {
+                const response = await fetch('/api/friends');
+                const data = await response.json();
+
+                const friendsList = document.getElementById('friendsList');
+                if (data.success && data.friends.length > 0) {
+                    friendsList.innerHTML = data.friends.map(friend => `
+                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" onclick="openChat(${friend.id}, '${friend.name}'); return false;">
+                            <div>
+                                <strong>${friend.name}</strong>
+                                <br>
+                                <small class="text-muted">${friend.email}</small>
+                            </div>
+                            ${friend.unread_count > 0 ? `<span class="badge bg-danger rounded-pill">${friend.unread_count}</span>` : ''}
+                        </a>
+                    `).join('');
+                } else {
+                    friendsList.innerHTML = '<p class="text-muted text-center">Még nincs barátod.</p>';
+                }
+            } catch (error) {
+                console.error('Hiba a barátlista betöltésekor:', error);
+            }
+        }
+
+        // Chat ablak megnyitása
+        function openChat(friendId, friendName) {
+            currentFriendId = friendId;
+            lastMessageCount = 0; // Reset üzenetszám
+            document.getElementById('chatFriendName').textContent = friendName;
+            document.getElementById('chatPanel').style.display = 'block';
+            document.getElementById('noChatPanel').style.display = 'none';
+            loadChatMessages(friendId);
+
+            // Automatikus frissítés 3 másodpercenként
+            if (chatRefreshInterval) clearInterval(chatRefreshInterval);
+            chatRefreshInterval = setInterval(() => loadChatMessages(friendId), 3000);
+        }
+
+        // Chat ablak bezárása
+        document.getElementById('closeChatBtn').addEventListener('click', () => {
+            document.getElementById('chatPanel').style.display = 'none';
+            document.getElementById('noChatPanel').style.display = 'block';
+            currentFriendId = null;
+            lastMessageCount = 0; // Reset üzenetszám
+            if (chatRefreshInterval) clearInterval(chatRefreshInterval);
+            loadFriends(); // Frissítjük a barátlistát hogy eltűnjenek az olvasatlan jelzések
+        });
+
+        // Chat üzenetek betöltése
+        let lastMessageCount = 0;
+        async function loadChatMessages(friendId) {
+            try {
+                const response = await fetch(`/api/chat/${friendId}`);
+                const data = await response.json();
+
+                const chatMessages = document.getElementById('chatMessages');
+                
+                // Csak akkor frissítjük az üzeneteket ha változás történt
+                if (data.success && data.messages.length > 0) {
+                    if (data.messages.length !== lastMessageCount) {
+                        const isScrolledToBottom = chatMessages.scrollHeight - chatMessages.clientHeight <= chatMessages.scrollTop + 50;
+                        
+                        chatMessages.innerHTML = data.messages.map(msg => `
+                            <div class="mb-2 ${msg.is_mine ? 'text-end' : 'text-start'}">
+                                <div class="d-inline-block px-3 py-2 rounded ${msg.is_mine ? 'bg-primary text-white' : 'bg-light'}" style="max-width: 70%;">
+                                    <small class="d-block"><strong>${msg.sender_name}</strong></small>
+                                    ${msg.message}
+                                    <small class="d-block text-muted mt-1" style="font-size: 0.75rem;">${msg.timestamp}</small>
+                                </div>
+                            </div>
+                        `).join('');
+                        
+                        lastMessageCount = data.messages.length;
+                        
+                        // Csak akkor scrolloljunk le ha korábban is lent voltunk
+                        if (isScrolledToBottom) {
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
+                    }
+                } else if (lastMessageCount !== 0) {
+                    chatMessages.innerHTML = '<p class="text-muted text-center">Még nincs üzenet.</p>';
+                    lastMessageCount = 0;
+                }
+            } catch (error) {
+                console.error('Hiba a chat betöltésekor:', error);
+            }
+        }
+
+        // Üzenet küldése
+        document.getElementById('sendMessageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = document.getElementById('messageInput').value;
+
+            if (!currentFriendId) return;
+
+            const formData = new FormData();
+            formData.append('receiver_id', currentFriendId);
+            formData.append('message', message);
+
+            try {
+                const response = await fetch('/api/chat/send', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('messageInput').value = '';
+                    loadChatMessages(currentFriendId);
+                } else {
+                    showToast(data.message, 'error');
+                }
+            } catch (error) {
+                showToast('Hiba történt az üzenet küldésekor!', 'error');
+            }
+        });
+
+        // Oldal betöltésekor barátlista betöltése
+        loadFriends();
+    </script>
+</body>
+</html>

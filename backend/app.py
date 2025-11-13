@@ -86,6 +86,28 @@ class ContactMessage(db.Model):
     # Relationship to User
     user = db.relationship('User', backref=db.backref('messages', lazy=True))
 
+class Friendship(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
+    
+    # Relationships
+    user = db.relationship('User', foreign_keys=[user_id], backref=db.backref('friendships', lazy=True))
+    friend = db.relationship('User', foreign_keys=[friend_id])
+
+class ChatMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=db.func.current_timestamp())
+    read = db.Column(db.Boolean, default=False)
+    
+    # Relationships
+    sender = db.relationship('User', foreign_keys=[sender_id], backref=db.backref('sent_messages', lazy=True))
+    receiver = db.relationship('User', foreign_keys=[receiver_id], backref=db.backref('received_messages', lazy=True))
+
 def get_user_settings():
     """Helper function to get current user settings"""
     username = session.get('username')
@@ -453,6 +475,142 @@ def play_game(game_name):
 
     iframe_src = url_for('static', filename=f'games/{game_name}/index.html')
     return render_template('game_embed.html', username=username, user=user, game_name=game_name, iframe_src=iframe_src)
+
+# Barátjelölés és chat API endpoint-ok
+@app.route('/api/add-friend', methods=['POST'])
+def add_friend():
+    if 'username' not in session:
+        return jsonify({'success': False, 'message': 'Nem vagy bejelentkezve!'}), 401
+    
+    friend_email = request.form.get('email')
+    if not friend_email:
+        return jsonify({'success': False, 'message': 'Az email cím kötelező!'}), 400
+    
+    current_user = User.query.filter_by(username=session['username']).first()
+    friend = User.query.filter_by(email=friend_email).first()
+    
+    if not friend:
+        return jsonify({'success': False, 'message': 'Nincs ilyen felhasználó!'}), 404
+    
+    if friend.id == current_user.id:
+        return jsonify({'success': False, 'message': 'Nem adhatod hozzá magad barátnak!'}), 400
+    
+    # Ellenőrizzük hogy már barátok-e
+    existing_friendship = Friendship.query.filter_by(user_id=current_user.id, friend_id=friend.id).first()
+    if existing_friendship:
+        return jsonify({'success': False, 'message': 'Már barátok vagytok!'}), 400
+    
+    # Kétirányú barátság létrehozása
+    friendship1 = Friendship(user_id=current_user.id, friend_id=friend.id)
+    friendship2 = Friendship(user_id=friend.id, friend_id=current_user.id)
+    db.session.add(friendship1)
+    db.session.add(friendship2)
+    db.session.commit()
+    
+    return jsonify({'success': True, 'message': f'{friend.name} sikeresen hozzáadva a barátaidhoz!', 'friend': {'id': friend.id, 'name': friend.name, 'email': friend.email}})
+
+@app.route('/api/friends')
+def get_friends():
+    if 'username' not in session:
+        return jsonify({'success': False, 'message': 'Nem vagy bejelentkezve!'}), 401
+    
+    current_user = User.query.filter_by(username=session['username']).first()
+    friendships = Friendship.query.filter_by(user_id=current_user.id).all()
+    
+    friends = []
+    for friendship in friendships:
+        friend = User.query.get(friendship.friend_id)
+        if friend:
+            # Ellenőrizzük hogy van-e olvasatlan üzenet ettől a baráttól
+            unread_count = ChatMessage.query.filter_by(sender_id=friend.id, receiver_id=current_user.id, read=False).count()
+            friends.append({
+                'id': friend.id,
+                'name': friend.name,
+                'email': friend.email,
+                'unread_count': unread_count
+            })
+    
+    return jsonify({'success': True, 'friends': friends})
+
+@app.route('/api/chat/send', methods=['POST'])
+def send_message():
+    if 'username' not in session:
+        return jsonify({'success': False, 'message': 'Nem vagy bejelentkezve!'}), 401
+    
+    receiver_id = request.form.get('receiver_id')
+    message_text = request.form.get('message')
+    
+    if not receiver_id or not message_text:
+        return jsonify({'success': False, 'message': 'Minden mező kitöltése kötelező!'}), 400
+    
+    current_user = User.query.filter_by(username=session['username']).first()
+    receiver = User.query.get(receiver_id)
+    
+    if not receiver:
+        return jsonify({'success': False, 'message': 'A címzett nem található!'}), 404
+    
+    # Ellenőrizzük hogy barátok-e
+    friendship = Friendship.query.filter_by(user_id=current_user.id, friend_id=receiver.id).first()
+    if not friendship:
+        return jsonify({'success': False, 'message': 'Csak barátaidnak küldhetsz üzenetet!'}), 403
+    
+    new_message = ChatMessage(sender_id=current_user.id, receiver_id=receiver.id, message=message_text)
+    db.session.add(new_message)
+    db.session.commit()
+    
+    return jsonify({'success': True, 'message': 'Üzenet elküldve!', 'chat_message': {
+        'id': new_message.id,
+        'sender_id': current_user.id,
+        'sender_name': current_user.name,
+        'message': new_message.message,
+        'timestamp': new_message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+    }})
+
+@app.route('/api/chat/<int:friend_id>')
+def get_chat_messages(friend_id):
+    if 'username' not in session:
+        return jsonify({'success': False, 'message': 'Nem vagy bejelentkezve!'}), 401
+    
+    current_user = User.query.filter_by(username=session['username']).first()
+    friend = User.query.get(friend_id)
+    
+    if not friend:
+        return jsonify({'success': False, 'message': 'A barát nem található!'}), 404
+    
+    # Lekérjük az összes üzenetet a két felhasználó között
+    messages = ChatMessage.query.filter(
+        ((ChatMessage.sender_id == current_user.id) & (ChatMessage.receiver_id == friend_id)) |
+        ((ChatMessage.sender_id == friend_id) & (ChatMessage.receiver_id == current_user.id))
+    ).order_by(ChatMessage.timestamp.asc()).all()
+    
+    # Megjelöljük olvasottnak az összes üzenetet amit a barát küldött
+    unread_messages = ChatMessage.query.filter_by(sender_id=friend_id, receiver_id=current_user.id, read=False).all()
+    for msg in unread_messages:
+        msg.read = True
+    db.session.commit()
+    
+    chat_messages = []
+    for msg in messages:
+        chat_messages.append({
+            'id': msg.id,
+            'sender_id': msg.sender_id,
+            'sender_name': msg.sender.name,
+            'message': msg.message,
+            'timestamp': msg.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+            'is_mine': msg.sender_id == current_user.id
+        })
+    
+    return jsonify({'success': True, 'messages': chat_messages, 'friend': {'id': friend.id, 'name': friend.name}})
+
+@app.route('/baratok')
+def baratok():
+    username = session.get('username')
+    if not username:
+        flash('Kérlek jelentkezz be a barátok eléréséhez!', 'warning')
+        return redirect(url_for('login_page'))
+    
+    user = User.query.filter_by(username=username).first()
+    return render_template('baratok.html', username=username, user=user)
 
 if __name__ == '__main__':
     # Ensure the instance directory for the SQLite DB exists so db.create_all() can create the file

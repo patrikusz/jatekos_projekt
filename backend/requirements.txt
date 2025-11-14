@@ -3,9 +3,5 @@ Flask-Cors==5.0.0
 Flask-SQLAlchemy==3.1.1
 Flask-Login==0.6.3
 Werkzeug==3.1.0
-<<<<<<< HEAD
 pytest==7.4.3
 pytest-cov==4.1.0
-=======
-python-dotenv==1.0.0
->>>>>>> 4c9414851a655f250b260f086d6f686f9b4b2ce9

@@ -1,0 +1,15 @@
+{
+  "name": "jatekos-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Jatekos project",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test": "cypress run",
+    "test:headed": "cypress run --headed",
+    "test:chrome": "cypress run --browser chrome"
+  },
+  "devDependencies": {
+    "cypress": "^13.6.0"
+  }
+}

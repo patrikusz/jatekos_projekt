@@ -636,6 +636,9 @@ def get_unread_messages():
     
     current_user = User.query.filter_by(username=session['username']).first()
     
+    if not current_user:
+        return jsonify({'success': False, 'message': 'Felhasználó nem található!'}), 404
+    
     # Olvasatlan üzenetek száma
     unread_count = ChatMessage.query.filter_by(receiver_id=current_user.id, read=False).count()
     

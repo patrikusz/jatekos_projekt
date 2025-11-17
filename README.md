@@ -1,8 +1,8 @@
-# 🎮 Játékos Projekt - Online Játék Platform
+# Játékos Projekt - Online Játék Platform
 
 Modern, játékos témájú webalkalmazás Flask backend-del, dinamikus témákkal és teljes körű felhasználói rendszerrel.
 
-## 📁 Projekt Struktúra
+## Projekt Struktúra
 
 ```
 jatekos_projekt/
@@ -50,7 +50,7 @@ jatekos_projekt/
         └── ProjectSettings/ # Unity beállítások
 ```
 
-## 🚀 Gyors Kezdés
+## Gyors Kezdés
 
 ### 1. Virtual Environment létrehozása és aktiválása
 
@@ -83,9 +83,9 @@ python app.py
 
 Nyisd meg: `http://127.0.0.1:5000/`
 
-## ✨ Funkciók
+## Funkciók
 
-### 🔐 Felhasználói Rendszer
+### Felhasználói Rendszer
 
 - **Regisztráció**: Név, email, felhasználónév és jelszó megadása
   - Email egyediség ellenőrzés
@@ -101,7 +101,7 @@ Nyisd meg: `http://127.0.0.1:5000/`
   - Animációk ki/bekapcsolása
   - Fiók törlése (dupla megerősítéssel)
 
-### 🎨 Téma Rendszer
+### Téma Rendszer
 
 **3 különböző téma:**
 
@@ -119,15 +119,15 @@ Nyisd meg: `http://127.0.0.1:5000/`
 - Modal ablakok
 - Navbar toggler ikonok
 
-### 🎮 Játék Kategóriák (5 db)
+### Játék Kategóriák (5 db)
 
-1. **🎮 Akció** - Intenzív csaták és izgalmas kalandok
-2. **🧩 Logikai** - Gondolkodtató feladványok
-3. **🏎️ Verseny** - Gyorsasági versenyek
-4. **⚽ Sport** - Virtuális sportélmények
-5. **👾 Retro** - Klasszikus játékok
+1. **Akció** - Intenzív csaták és izgalmas kalandok
+2. **ogikai** - Gondolkodtató feladványok
+3. **Verseny** - Gyorsasági versenyek
+4. **Sport** - Virtuális sportélmények
+5. **Retro** - Klasszikus játékok
 
-### 📧 Kapcsolatfelvételi Rendszer
+###Kapcsolatfelvételi Rendszer
 
 **Felhasználók számára:**
 
@@ -148,14 +148,14 @@ Nyisd meg: `http://127.0.0.1:5000/`
   - Üzenet törlés
 - Regisztrált vs. vendég felhasználók megkülönböztetése
 
-### 🎯 Hasznos Oldalak
+### Hasznos Oldalak
 
 - **Súgó** - Útmutatók és első lépések
 - **GYIK** - Gyakran ismételt kérdések
   - Admin email válasz információ
 - **Kapcsolat** - Kapcsolatfelvételi űrlap
 
-### 🎨 Modern UI/UX
+### Modern UI/UX
 
 - **Animált gradient háttér** - Folyamatosan mozgó színek (színes témában)
 - **Glassmorphism dizájn** - Üveges, modern felületek
@@ -166,7 +166,7 @@ Nyisd meg: `http://127.0.0.1:5000/`
 - **Toast értesítések** - Felhasználóbarát feedback
 - **Animációk ki/bekapcsolása** - Akadálymentesség
 
-## 🛠️ Technológiák
+## Technológiák
 
 ### Backend
 
@@ -183,7 +183,7 @@ Nyisd meg: `http://127.0.0.1:5000/`
 - **JavaScript (ES6+)** - Fetch API, AJAX
 - **Jinja2** - Template engine (macro-k)
 
-## 📝 Adatbázis Séma
+## Adatbázis Séma
 
 ### User Model
 
@@ -210,7 +210,7 @@ timestamp: DateTime (Default: CURRENT_TIMESTAMP)
 status: String(50) (Default: 'new')             # new/read/replied
 ```
 
-## 🔒 Biztonság
+## Biztonság
 
 - ✅ Jelszavak **bcrypt** hash-eléssel tárolva
 - ✅ Session-alapú authentikáció
@@ -222,7 +222,7 @@ status: String(50) (Default: 'new')             # new/read/replied
 - ✅ Admin jogosultság ellenőrzés
 - ✅ CSRF védelem form-oknál
 
-## 🎯 API Végpontok
+## API Végpontok
 
 ### Publikus
 
@@ -261,7 +261,7 @@ status: String(50) (Default: 'new')             # new/read/replied
 - `POST /admin/messages/<id>/mark-replied` - Megválaszoltnak jelölés
 - `POST /admin/messages/<id>/delete` - Üzenet törlése
 
-## 👨‍💻 Fejlesztés
+## Fejlesztés
 
 ### Admin Fiók Létrehozása
 
@@ -306,7 +306,7 @@ import navbar %} {{ head('Oldal Cím') }} {{ navbar(username) }}
 ></body>
 ```
 
-## 🧪 Tesztelés
+## Tesztelés
 
 ### Regisztráció
 
@@ -342,17 +342,17 @@ import navbar %} {{ head('Oldal Cím') }} {{ navbar(username) }}
 - [ ] Email válasz (mailto)
 - [ ] Üzenet törlése
 
-## 📄 Licenc
+## Licenc
 
 Ez egy oktatási projekt.
 
-## 🤝 Közreműködés
+## Közreműködés
 
 Patrik - Fejlesztő
 Erik - Fejlesztő
 László - Fejlesztő
 
-## 📄 Dokumentáció
+## Dokumentáció
 
 A projekt részletes dokumentációja a következő fájlokban található:
 
@@ -364,7 +364,7 @@ A projekt részletes dokumentációja a következő fájlokban található:
 
 ---
 
-## 🎮 Unity CarGame
+## Unity CarGame
 
 A projekt tartalmaz egy Unity WebGL játékot is:
 

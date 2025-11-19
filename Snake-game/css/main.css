@@ -1,0 +1,22 @@
+*{
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+body {
+    width: 100vw;
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    color: white;
+}
+canvas {
+    background: url(/media/luke-chesser-pJadQetzTkI-unsplash.jpg);
+    background-size: cover;
+    box-shadow: 0 0 0 .5rem #000;
+    border-radius: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}

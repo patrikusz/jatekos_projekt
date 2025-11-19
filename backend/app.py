@@ -30,6 +30,12 @@ games_data = [
         'desc': 'Teszteld a logikádat ezzel a rejtvényjátékkal.',
     },
     {
+        'category': 'Logikai',
+        'icon': '🧠',
+        'name': 'Memory Card Game',
+        'desc': 'Emlékezz az összes kártya helyzetére!',
+    },
+    {
         'category': 'Verseny',
         'icon': '🏎️',
         'name': 'Speed Racer',
@@ -46,6 +52,12 @@ games_data = [
         'icon': '👾',
         'name': 'Pac-Man Reborn',
         'desc': 'A klasszikus Pac-Man újragondolva!',
+    },
+    {
+        'category': 'Retro',
+        'icon': '🐍',
+        'name': 'Snake Game',
+        'desc': 'A klasszikus Snake játék - mozgasd a kígyót és gyűjts élelmet!',
     }
 ]
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
@@ -273,6 +285,70 @@ def retro():
     username = session.get('username')
     user = get_user_settings()
     return render_template('retro.html', username=username, user=user)
+
+# Memory Game API endpoints
+memory_game_users = {}
+
+def make_board(size):
+    """Creates a memory game board"""
+    import random
+    double = size * size
+    pool = []
+    pool_two = []
+    board = []
+    for i in range(int(double / 2)):
+        pool.append(i)
+        pool_two.append(i)
+    larger_pool = []
+    for i in range(double):
+        if len(pool) != 0:
+            random_draw = pool[random.randint(0, len(pool) - 1)]
+            pool.remove(random_draw)
+            larger_pool.append(random_draw)
+        elif len(pool) == 1:
+            random_draw = pool[0]
+            pool.remove(random_draw)
+            larger_pool.append(random_draw)
+        if len(pool_two) != 0:
+            random_draw = pool_two[random.randint(0, len(pool_two) - 1)]
+            pool_two.remove(random_draw)
+            larger_pool.append(random_draw)
+        elif len(pool_two) == 1:
+            random_draw = pool_two[0]
+            pool_two.remove(random_draw)
+            larger_pool.append(random_draw)
+
+    for i in range(size):	
+        mini_board = []
+        for j in range(size):
+            mini_board.append(larger_pool[0])
+            larger_pool.remove(larger_pool[0])
+        board.append(mini_board)	
+    return board
+
+@app.route("/intro", methods=["POST"])
+def memory_intro():
+    import ast
+    post_obj = request.json
+    post_obj["board"] = make_board(post_obj["level"])
+    memory_game_users[post_obj["username"]] = post_obj
+    return jsonify(post_obj)
+
+@app.route("/card", methods=["POST"])
+def memory_card():
+    import ast
+    post_obj = request.json
+    choice = post_obj["choice"]
+    choice = ast.literal_eval(choice) if isinstance(choice, str) else choice
+    client_name = post_obj["username"]
+    client = memory_game_users.get(client_name)
+    if not client:
+        return jsonify({'error': 'User not found'}), 404
+    client_board = client["board"]
+    info = {}
+    info["value"] = client_board[int(choice["bigBox"])][int(choice["smallerBox"])]
+    info["id"] = choice["id"]
+    return jsonify(info)
 
 @app.route('/beallitasok')
 def beallitasok():

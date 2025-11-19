@@ -18,7 +18,7 @@
                     <div class="card-header" style="background: linear-gradient(135deg, #667eea, #764ba2); height: 200px;"></div>
                     <div class="card-body">
                         <h5 class="card-title fw-bold">Puzzle Master</h5>
-                        <p class="card-text text-muted">Tesztel d a logikádat ezzel a rejtvényjátékkal.</p>
+                        <p class="card-text text-muted">Teszteld a logikádat ezzel a rejtvényjátékkal.</p>
                         <button class="btn btn-sm btn-gradient-primary w-100"><i class="bi bi-play-fill"></i> Játék</button>
                     </div>
                 </div>
@@ -34,6 +34,22 @@
                         <h5 class="card-title fw-bold">Cube Composer</h5>
                         <p class="card-text text-muted">Funkcionális puzzle játék - programozd meg a kockákat!</p>
                         <a href="{{ url_for('static', filename='css/cube-composer/index.html') }}" target="_blank" class="btn btn-sm btn-gradient-primary w-100">
+                            <i class="bi bi-play-fill"></i> Játék
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card glass-card hover-lift h-100">
+                    <div class="card-header" style="background: linear-gradient(135deg, #ec4899, #f59e0b); height: 200px;">
+                        <div class="d-flex justify-content-center align-items-center h-100">
+                            <span style="font-size: 80px;">🧠</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Memory Card Game</h5>
+                        <p class="card-text text-muted">Emlékezz az összes kártya helyzetére!</p>
+                        <a href="{{ url_for('play_game', game_name='memory-game') }}" class="btn btn-sm btn-gradient-primary w-100">
                             <i class="bi bi-play-fill"></i> Játék
                         </a>
                     </div>

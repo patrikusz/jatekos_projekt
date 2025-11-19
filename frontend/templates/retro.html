@@ -23,6 +23,22 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card glass-card hover-lift h-100">
+                    <div class="card-header" style="background: linear-gradient(135deg, #00d084, #3a47d5); height: 200px;">
+                        <div class="d-flex justify-content-center align-items-center h-100">
+                            <span style="font-size: 80px;">🐍</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Snake Game</h5>
+                        <p class="card-text text-muted">A klasszikus Snake játék - mozgasd a kígyót és gyűjts élelmet!</p>
+                        <a href="{{ url_for('play_game', game_name='snake-game') }}" class="btn btn-sm btn-gradient-primary w-100">
+                            <i class="bi bi-play-fill"></i> Játék
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>

@@ -1,7 +1,7 @@
 # Rendszerterv - Játékos Projekt
 
-**Verzió:** 1.0.0  
-**Dátum:** 2025. november 11.  
+**Verzió:** 1.1.0  
+**Dátum:** 2025. november 23.  
 **Szerzők:** Kovács Patrik, Nagy Erik, Bocskai László
 
 ---
@@ -107,9 +107,16 @@ Feladatai: Unity CarGame fejlesztése, WebGL build létrehozása, játék mechan
 4. **Kapcsolatfelvétel**
 
    - Kapcsolat oldal → Űrlap kitöltése → Üzenet küldés → Adatbázisba mentés
-   - Admin oldal → Üzenetek listázása → Státusz kezelés → Email válasz
+   - Admin oldal → Üzenetek listázása → Státusz kezelés → Törlés/válasz
 
-5. **Admin működés**
+5. **Barátok és Chat**
+
+   - Barát hozzáadása email alapján → Felhasználó keresés → Kétirányú barátság létrehozása
+   - Barátok listája → Barát kiválasztása → Chat megnyitása
+   - Üzenet küldése → Adatbázis mentés → Címzett értesítése
+   - Új üzenet → Toast értesítés → Olvasatlan számláló frissítés
+
+6. **Admin működés**
    - Admin bejelentkezés → Üzenetek megtekintése → Státusz módosítás → Törlés/válasz
 
 ## 4. Követelmények
@@ -130,6 +137,12 @@ Feladatai: Unity CarGame fejlesztése, WebGL build létrehozása, játék mechan
 - **F12:** Navbar rögzítése görgetés közben
 - **F13:** Toast értesítések felhasználói visszajelzésekhez
 - **F14:** Scoreboard és rekordok kezelése (tervezett)
+- **F15:** Barátok hozzáadása email cím alapján
+- **F16:** Barátok listázása olvasatlan üzenetek számával
+- **F17:** Privát chat barátok között valós idejű üzenetküldéssel
+- **F18:** Chat értesítések toast notification-ökkel
+- **F19:** Dropdown menü z-index optimalizálás
+- **F20:** Játék beágyazási oldal tisztítása
 
 ### Nem funkcionális követelmények:
 
@@ -421,6 +434,10 @@ CREATE TABLE contact_message (
 
 - `user` 1:N `contact_message` (egy felhasználó több üzenetet küldhet)
 - `contact_message.user_id` nullable (vendégek is küldhetnek üzenetet)
+- `user` 1:N `friendship` (egy felhasználó több baráttal rendelkezhet)
+- `friendship` kétirányú kapcsolat (mindkét irányban létrejön egy rekord)
+- `user` 1:N `chat_message` sender_id alapján (küldött üzenetek)
+- `user` 1:N `chat_message` receiver_id alapján (fogadott üzenetek)
 
 ### Biztonsági architektúra:
 
@@ -474,6 +491,32 @@ CREATE TABLE contact_message (
 │ timestamp           │
 │ status              │
 └─────────────────────┘
+
+          │ 1
+          │
+          │ *
+┌─────────────────────┐
+│    Friendship       │
+├─────────────────────┤
+│ id (PK)             │
+│ user_id (FK)        │
+│ friend_id (FK)      │
+│ timestamp           │
+└─────────────────────┘
+
+          │ 1
+          │
+          │ *
+┌─────────────────────┐
+│    ChatMessage      │
+├─────────────────────┤
+│ id (PK)             │
+│ sender_id (FK)      │
+│ receiver_id (FK)    │
+│ message             │
+│ timestamp           │
+│ read                │
+└─────────────────────┘
 ```
 
 ### Tábla részletek:
@@ -501,12 +544,35 @@ CREATE TABLE contact_message (
 | timestamp | DATETIME | DEFAULT CURRENT_TIMESTAMP | Küldés időpontja |
 | status | VARCHAR(50) | DEFAULT 'new' | Státusz (new/read/replied) |
 
+**friendship tábla:**
+| Mező | Típus | Megszorítás | Leírás |
+|------|-------|-------------|---------|
+| id | INTEGER | PRIMARY KEY, AUTOINCREMENT | Egyedi azonosító |
+| user_id | INTEGER | FOREIGN KEY, NOT NULL | Felhasználó ID |
+| friend_id | INTEGER | FOREIGN KEY, NOT NULL | Barát ID |
+| timestamp | DATETIME | DEFAULT CURRENT_TIMESTAMP | Barátság létrehozás időpontja |
+
+**chat_message tábla:**
+| Mező | Típus | Megszorítás | Leírás |
+|------|-------|-------------|---------|
+| id | INTEGER | PRIMARY KEY, AUTOINCREMENT | Egyedi azonosító |
+| sender_id | INTEGER | FOREIGN KEY, NOT NULL | Küldő ID |
+| receiver_id | INTEGER | FOREIGN KEY, NOT NULL | Címzett ID |
+| message | TEXT | NOT NULL | Üzenet szövege |
+| timestamp | DATETIME | DEFAULT CURRENT_TIMESTAMP | Küldés időpontja |
+| read | BOOLEAN | DEFAULT 0 | Olvasva-e |
+
 ### Indexek:
 
 - `user.username` - UNIQUE index (bejelentkezés gyorsítása)
 - `user.email` - UNIQUE index (duplikáció ellenőrzés)
 - `contact_message.status` - INDEX (admin felület szűrés)
 - `contact_message.timestamp` - INDEX (időrendi rendezés)
+- `friendship.user_id` - INDEX (barátok gyors lekérdezése)
+- `friendship.friend_id` - INDEX (kétirányú barátság keresés)
+- `chat_message.sender_id` - INDEX (küldött üzenetek)
+- `chat_message.receiver_id` - INDEX (fogadott üzenetek)
+- `chat_message.read` - INDEX (olvasatlan üzenetek szűrése)
 
 ## 10. Implementációs terv
 
@@ -920,9 +986,10 @@ Az alkalmazás folyamatos üzemeltetése és karbantartása magában foglalja:
 **Példa:**
 
 - v1.0.0 - Első stabil release
-- v1.1.0 - Scoreboard funkció hozzáadása
-- v1.1.1 - Session bug javítás
-- v2.0.0 - Új authentikáció rendszer
+- v1.1.0 - Barátok és chat rendszer hozzáadása
+- v1.1.1 - Dropdown menü z-index javítás
+- v1.1.2 - Játék oldal UI tisztítás
+- v2.0.0 - Új authentikáció rendszer (jövőbeli)
 
 ### Monitoring és logging:
 
@@ -938,6 +1005,8 @@ Az alkalmazás folyamatos üzemeltetése és karbantartása magában foglalja:
 - Átlagos oldal betöltési idő
 - Játék indítások száma
 - Üzenetek száma és státusza
+- Chat üzenetek száma (küldött/fogadott)
+- Barátkapcsolatok száma
 - Hiba rate (4xx, 5xx válaszok)
 
 ---
@@ -945,5 +1014,5 @@ Az alkalmazás folyamatos üzemeltetése és karbantartása magában foglalja:
 **Dokumentum vége**
 
 Készítette: Kovács Patrik, Nagy Erik, Bocskai László  
-Utolsó módosítás: 2025. november 11.  
-Verzió: 1.0.0
+Utolsó módosítás: 2025. november 23.  
+Verzió: 1.1.0

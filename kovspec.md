@@ -1,7 +1,7 @@
 # 🎮 Játékos Projekt — Követelményspecifikáció (KovSpec)
 
-**Verzió:** 1.1.0  
-**Dátum:** 2025. november 13.  
+**Verzió:** 1.2.0  
+**Dátum:** 2025. november 23.  
 **Szerzők:** Patrik, Erik, László
 
 ---
@@ -57,43 +57,45 @@ A Játékos Projekt egy modern, reszponzív, online játék platform, ahol a fel
 | Felhasználó     | K21 | Téma rendszer               | 1.0 | 3 téma közül választás: Színes, Sötét, Világos mód.                                                  |
 | Felhasználó     | K22 | Animációk vezérlése         | 1.0 | Felhasználók ki/bekapcsolhatják az oldal animációit.                                                 |
 | Felhasználó     | K23 | Fiók törlése                | 1.0 | Jelszóval és megerősítéssel véglegesen törölhető a felhasználói fiók.                                |
-| Közösség        | K24 | Barátok hozzáadása          | 1.0 | Email cím alapján barátok hozzáadása az oldalon belül.                                               |
+| Közösség        | K24 | Barátok hozzáadása          | 1.0 | Email cím alapán barátok hozzáadása az oldalon belül.                                               |
 | Közösség        | K25 | Barátlista megjelenítése    | 1.0 | A felhasználó lássa barátainak listáját olvasatlan üzenetek számával.                                |
 | Közösség        | K26 | Chat rendszer               | 1.0 | Barátok között privát chat, üzenetküldés és fogadás valós időben.                                    |
 | Közösség        | K27 | Chat értesítések            | 1.0 | Toast értesítés új üzenetekről, bárhol az oldalon, böngésző értesítés támogatással.                  |
-| Kommunikáció    | K28 | Kapcsolat oldal             | 1.0 | Űrlap kapcsolatfelvételhez: név, email, tárgy, üzenet mezőkkel.                                      |
-| Kommunikáció    | K29 | Kapcsolati űrlap validálás  | 1.0 | Email formátum validálása, kötelező mezők ellenőrzése.                                               |
-| Kommunikáció    | K30 | Admin üzenetek kezelése     | 1.0 | Admin lássa az összes beérkezett üzenetet, státusz változtatással (új/olvasott/megválaszolt).        |
-| Design          | K31 | Reszponzív design           | 1.0 | Az oldal mobilon, tableten és számítógépen is tökéletesen jelenjen meg.                              |
-| Design          | K32 | Egységes dizájn nyelv       | 1.0 | Glass morphism kártyák, gradient gombok, egységes színvilág.                                         |
-| Design          | K33 | Kategória ikonok            | 1.0 | Minden játék kategóriának saját emoji ikonja legyen.                                                 |
-| Design          | K34 | Toast notification rendszer | 1.0 | Egységes visszajelzés rendszer sikeres és sikertelen műveletekhez.                                   |
-| Navigáció       | K35 | Görgetés közbeni menü       | 1.0 | A menü fix pozícióban maradjon görgetés közben.                                                      |
-| Navigáció       | K36 | Vissza az elejére gomb      | 1.0 | Hosszú oldalakon gomb az oldal tetejére való visszaugráshoz.                                         |
-| Navigáció       | K37 | Keresés funkció             | 1.0 | Játékok keresése név alapján a kezdőlapon.                                                           |
-| Tartalom        | K38 | GYIK oldal                  | 1.0 | Gyakran Ismételt Kérdések oldal accordion formátumban.                                               |
-| Tartalom        | K39 | Súgó oldal                  | 1.0 | Részletes útmutató az oldal funkcióinak használatához.                                               |
-| Technikai       | K40 | Gyors betöltés              | 1.0 | Az oldal 2 másodpercen belül betöltődjön.                                                            |
-| Technikai       | K41 | Böngésző támogatás          | 1.0 | Működjön Chrome, Edge, Firefox legújabb verzióiban.                                                  |
-| Technikai       | K42 | Adatbázis séma              | 1.0 | SQLite adatbázis User, ContactMessage, Friendship, ChatMessage táblákkal.                            |
-| Technikai       | K43 | Session kezelés             | 1.0 | Biztonságos session alapú bejelentkezés Flask-ben.                                                   |
-| Technikai       | K44 | Jelszó biztonság            | 1.0 | Bcrypt hash használata jelszavak tárolásához.                                                        |
-| Technikai       | K45 | XSS védelem                 | 1.0 | Input validálás és sanitizálás minden felhasználói bevitelnél.                                       |
-| Technikai       | K46 | HTTPS támogatás             | 1.0 | Az oldal HTTPS-en keresztül is elérhető legyen production környezetben.                              |
-| Technikai       | K47 | WebGL támogatás             | 1.0 | Unity WebGL játékok futtatása modern böngészőkben.                                                   |
-| Technikai       | K48 | LocalStorage használat      | 1.0 | Téma és animáció beállítások tárolása böngészőben.                                                   |
-| Fejlesztés      | K49 | Projekt struktúra           | 1.0 | Tiszta elválasztás: backend/, frontend/, jatekok/ mappák.                                            |
-| Fejlesztés      | K50 | Verziókezelés               | 1.0 | Git használata, semantic versioning (x.y.z).                                                         |
-| Fejlesztés      | K51 | Dokumentáció                | 1.0 | Követelményspecifikáció, user story-k, README fájlok.                                                |
-| Fejlesztés      | K52 | Kód minőség                 | 1.0 | Tiszta, refaktorált kód, ismétlődések elkerülése.                                                    |
-| Tesztelés       | K53 | Manuális tesztek            | 1.0 | UI/UX tesztelés különböző eszközökön és böngészőkben.                                                |
-| Tesztelés       | K54 | Automatizált tesztek        | 1.0 | Backend unit tesztek pytest-tel.                                                                     |
-| Tesztelés       | K55 | E2E tesztek                 | 1.0 | End-to-end funkcionális tesztek Selenium-mal.                                                        |
-| Hozzáférhetőség | K56 | ARIA szerepek               | 1.0 | Megfelelő ARIA címkék a képernyőolvasók támogatásához.                                               |
-| Hozzáférhetőség | K57 | Fókusz kezelés              | 1.0 | Billentyűzettel való navigáció támogatása.                                                           |
-| Hozzáférhetőség | K58 | Kontraszt arányok           | 1.0 | Színek kontrasztja megfeleljen a WCAG irányelveknek.                                                 |
-| Skálázhatóság   | K59 | API teljesítmény            | 1.0 | Scoreboard és chat API ~1000 kérés/perc kezelése.                                                    |
-| Skálázhatóság   | K60 | Adatbázis optimalizálás     | 1.0 | Indexek és query optimalizálás a gyors adatlekéréshez.                                               |
+| Design          | K28 | Dropdown menü z-index       | 1.1 | Dropdown menü megfelelő rétegzése, z-index optimalizálás.                                            |
+| Design          | K29 | Játék oldal tisztítás       | 1.1 | Zavaró elemek eltávolítása a játék beágyazási oldalról.                                              |
+| Kommunikáció    | K30 | Kapcsolat oldal             | 1.0 | Űrlap kapcsolatfelvételhez: név, email, tárgy, üzenet mezőkkel.                                      |
+| Kommunikáció    | K31 | Kapcsolati űrlap validálás  | 1.0 | Email formátum validálása, kötelező mezők ellenőrzése.                                               |
+| Kommunikáció    | K32 | Admin üzenetek kezelése     | 1.0 | Admin lássa az összes beérkezett üzenetet, státusz változtatással (új/olvasott/megválaszolt).        |
+| Design          | K33 | Reszponzív design           | 1.0 | Az oldal mobilon, tableten és számítógépen is tökéletesen jelenjen meg.                              |
+| Design          | K34 | Egységes dizájn nyelv       | 1.0 | Glass morphism kártyák, gradient gombok, egységes színvilág.                                         |
+| Design          | K35 | Kategória ikonok            | 1.0 | Minden játék kategóriának saját emoji ikonja legyen.                                                 |
+| Design          | K36 | Toast notification rendszer | 1.0 | Egységes visszajelzés rendszer sikeres és sikertelen műveletekhez.                                   |
+| Navigáció       | K37 | Görgetés közbeni menü       | 1.0 | A menü fix pozícióban maradjon görgetés közben.                                                      |
+| Navigáció       | K38 | Vissza az elejére gomb      | 1.0 | Hosszú oldalakon gomb az oldal tetejére való visszaugráshoz.                                         |
+| Navigáció       | K39 | Keresés funkció             | 1.0 | Játékok keresése név alapján a kezdőlapon.                                                           |
+| Tartalom        | K40 | GYIK oldal                  | 1.0 | Gyakran Ismételt Kérdések oldal accordion formátumban.                                               |
+| Tartalom        | K41 | Súgó oldal                  | 1.0 | Részletes útmutató az oldal funkcióinak használatához.                                               |
+| Technikai       | K42 | Gyors betöltés              | 1.0 | Az oldal 2 másodpercen belül betöltődjön.                                                            |
+| Technikai       | K43 | Böngésző támogatás          | 1.0 | Működjön Chrome, Edge, Firefox legújabb verzióiban.                                                  |
+| Technikai       | K44 | Adatbázis séma              | 1.0 | SQLite adatbázis User, ContactMessage, Friendship, ChatMessage táblákkal.                            |
+| Technikai       | K45 | Session kezelés             | 1.0 | Biztonságos session alapú bejelentkezés Flask-ben.                                                   |
+| Technikai       | K46 | Jelszó biztonság            | 1.0 | Bcrypt hash használata jelszavak tárolásához.                                                        |
+| Technikai       | K47 | XSS védelem                 | 1.0 | Input validálás és sanitizálás minden felhasználói bevitelnél.                                       |
+| Technikai       | K48 | HTTPS támogatás             | 1.0 | Az oldal HTTPS-en keresztül is elérhető legyen production környezetben.                              |
+| Technikai       | K49 | WebGL támogatás             | 1.0 | Unity WebGL játékok futtatása modern böngészőkben.                                                   |
+| Technikai       | K50 | LocalStorage használat      | 1.0 | Téma és animáció beállítások tárolása böngészőben.                                                   |
+| Fejlesztés      | K51 | Projekt struktúra           | 1.0 | Tiszta elválasztás: backend/, frontend/, jatekok/ mappák.                                            |
+| Fejlesztés      | K52 | Verziókezelés               | 1.0 | Git használata, semantic versioning (x.y.z).                                                         |
+| Fejlesztés      | K53 | Dokumentáció                | 1.0 | Követelményspecifikáció, user story-k, README fájlok.                                                |
+| Fejlesztés      | K54 | Kód minőség                 | 1.0 | Tiszta, refaktorált kód, ismétlődések elkerülése.                                                    |
+| Tesztelés       | K55 | Manuális tesztek            | 1.0 | UI/UX tesztelés különböző eszközökön és böngészőkben.                                                |
+| Tesztelés       | K56 | Automatizált tesztek        | 1.0 | Backend unit tesztek pytest-tel.                                                                     |
+| Tesztelés       | K57 | E2E tesztek                 | 1.0 | End-to-end funkcionális tesztek Selenium-mal.                                                        |
+| Hozzáférhetőség | K58 | ARIA szerepek               | 1.0 | Megfelelő ARIA címkék a képernyőolvasók támogatásához.                                               |
+| Hozzáférhetőség | K59 | Fókusz kezelés              | 1.0 | Billentyűzettel való navigáció támogatása.                                                           |
+| Hozzáférhetőség | K60 | Kontraszt arányok           | 1.0 | Színek kontrasztja megfeleljen a WCAG irányelveknek.                                                 |
+| Skálázhatóság   | K61 | API teljesítmény            | 1.0 | Scoreboard és chat API ~1000 kérés/perc kezelése.                                                    |
+| Skálázhatóság   | K62 | Adatbázis optimalizálás     | 1.0 | Indexek és query optimalizálás a gyors adatlekéréshez.                                               |
 
 ---
 

@@ -25,3 +25,5 @@
 | 2025.11.13 | Értesítési rendszer fejlesztése, toast notification, böngésző push értesítések                                                                          | Értesítési rendszer kész                |
 | 2025.11.13 | UML diagramok elkészítése (UseCase, Class, ER), dokumentáció bővítése, user story-k Gherkin formátumra konvertálása                                     | Teljes műszaki dokumentáció             |
 | 2025.11.14 | Átfogó unit tesztek implementálása backendhez (42 teszt), Python 3.14 kompatibilitás javítások, teszt dokumentáció elkészítése                         | Backend teljesen letesztelve            |
+| 2025.11.23 | Dropdown menü z-index javítása (navbar és dropdown-menu rétegzés), keresési mező átfedés megoldása, játék oldal tisztítása                             | UI rétegzési problémák megoldva         |
+| 2025.11.23 | "Vissza a versenyekhez" gomb eltávolítása a játék beágyazási oldalról (game_embed.html), felhasználói élmény egyszerűsítése                           | Játék oldal egyszerűsítve               |

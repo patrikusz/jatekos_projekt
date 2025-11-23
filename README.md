@@ -121,13 +121,29 @@ Nyisd meg: `http://127.0.0.1:5000/`
 
 ### Játék Kategóriák (5 db)
 
-1. **Akció** - Intenzív csaták és izgalmas kalandok
-2. **ogikai** - Gondolkodtató feladványok
+1. **Akció** - Intenziv csáták és izgalmas kalandok
+2. **Logikai** - Gondolkodtato feladványok
 3. **Verseny** - Gyorsasági versenyek
 4. **Sport** - Virtuális sportélmények
 5. **Retro** - Klasszikus játékok
 
-###Kapcsolatfelvételi Rendszer
+### Barátok és Chat Rendszer
+
+**Barát hozzáadása:**
+
+- Email cím alapú keresés
+- Kétirányú barátság létrehozása
+- Barátok listázása kártyákban
+
+**Chat funkciók:**
+
+- Privát üzenetek barátok között
+- Valós idejű üzenetfrissítés
+- Olvasatlan üzenetek számlálója
+- Üzenetek automatikus olvasottná jelölése
+- Toast értesítések új üzenetekről
+
+### Kapcsolatfelvételi Rendszer
 
 **Felhasználók számára:**
 
@@ -210,6 +226,27 @@ timestamp: DateTime (Default: CURRENT_TIMESTAMP)
 status: String(50) (Default: 'new')             # new/read/replied
 ```
 
+### Friendship Model
+
+```python
+id: Integer (Primary Key)
+user_id: Integer (Foreign Key -> User.id, Not Null)
+friend_id: Integer (Foreign Key -> User.id, Not Null)
+timestamp: DateTime (Default: CURRENT_TIMESTAMP)
+# Kétirányú kapcsolat: mindkettő irányban létrejön egy rekord
+```
+
+### ChatMessage Model
+
+```python
+id: Integer (Primary Key)
+sender_id: Integer (Foreign Key -> User.id, Not Null)
+receiver_id: Integer (Foreign Key -> User.id, Not Null)
+message: Text (Not Null)
+timestamp: DateTime (Default: CURRENT_TIMESTAMP)
+read: Boolean (Default: False)
+```
+
 ## Biztonság
 
 - ✅ Jelszavak **bcrypt** hash-eléssel tárolva
@@ -253,6 +290,23 @@ status: String(50) (Default: 'new')             # new/read/replied
 - `POST /change-password` - Jelszó változtatás (AJAX)
 - `POST /update-settings` - Téma és animációk (AJAX)
 - `POST /delete-account` - Fiók törlése (AJAX)
+
+### Barátok és Chat (Login szükséges)
+
+- `GET /baratok` - Barátok és chat oldal
+- `POST /api/add-friend` - Barát hozzáadása email alapján (AJAX)
+- `GET /api/friends` - Barátok listája olvasatlan üzenetek számával (AJAX)
+- `POST /api/chat/send` - Üzenet küldése (AJAX)
+- `GET /api/chat/<friend_id>` - Chat üzenetek lekérése (AJAX)
+- `GET /api/unread-messages` - Olvasatlan üzenetek száma (AJAX)
+
+### Játékok
+
+- `GET /play/<game_name>` - Játék beágyazása iframe-ben
+- `POST /intro` - Memory game inicializálás (AJAX)
+- `POST /card` - Memory game kártya lekérés (AJAX)
+- `GET /game/<name>` - Játék részletek oldal
+- `GET /search` - Játékok keresése
 
 ### Admin (Csak 'admin' felhasználó)
 

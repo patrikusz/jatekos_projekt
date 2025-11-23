@@ -14,10 +14,7 @@
     {{ navbar(username) }}
 
     <div class="container play-container">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="mb-0">Játék: {{ game_name }}</h3>
-            <a href="{{ url_for('verseny') }}" class="btn btn-outline-light"><i class="bi bi-arrow-left"></i> Vissza a versenyekhez</a>
-        </div>
+        <h3 class="mb-3">Játék: {{ game_name }}</h3>
 
         <div class="card glass-card">
             <div class="card-body p-0">
